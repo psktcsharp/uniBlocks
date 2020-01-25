@@ -16,8 +16,8 @@ namespace AspNetCoreGraph
           
         }
 
-        public DbSet<Service> Books { get; set; }
-        public DbSet<Subscription> Authors { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
     }
 }
 

@@ -1,7 +1,7 @@
 ﻿using GraphQL.Types;
 using GraphQL;
 
-namespace Api.Graphql
+namespace AspNetCoreGraph.Graphql
 {
     public class MySchema
     {

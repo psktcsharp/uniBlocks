@@ -1,9 +1,12 @@
-﻿using AspNetCoreGraph.Models;
+﻿using AspNetCoreGraph;
+using AspNetCoreGraph.Models;
 using GraphQL;
+using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Api.Graphql
+namespace AspNetCoreGraph.Graphql
 {
     public class Query
     {
@@ -13,11 +16,12 @@ namespace Api.Graphql
             using(var db = new UniBlocksDBContext())
             {
                 return db.Services
-                    .Include(s => s.Subscription)
+                    .Include(s => s.Subscriptions)
                     .ToList();
             }
         }
-        public IEnumerable<Service> GetSubscriptions()
+        [GraphQLMetadata("subscriptions")]
+        public IEnumerable<Subscription> GetSubscriptions()
         {
             using (var db = new UniBlocksDBContext())
             {
@@ -25,6 +29,11 @@ namespace Api.Graphql
                     .Include(sub => sub.Services)
                     .ToList();
             }
+        }
+        [GraphQLMetadata("hello")]
+        public string GetHello()
+        {
+            return "World";
         }
     }
 }

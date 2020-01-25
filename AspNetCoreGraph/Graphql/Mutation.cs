@@ -1,7 +1,7 @@
 ﻿using AspNetCoreGraph.Models;
 using GraphQL;
 
-namespace Api.Graphql
+namespace AspNetCoreGraph.Graphql
 {
     [GraphQLMetadata("Mutation")]
     public class Mutation
