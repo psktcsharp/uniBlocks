@@ -1,7 +1,7 @@
 ﻿using AspNetCoreGraph.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.Database
+namespace AspNetCoreGraph
 {
 
     public class UniBlocksDBContext : DbContext
@@ -13,7 +13,7 @@ namespace Api.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseInternalServiceProvider("UniBlocksDB");
+          
         }
 
         public DbSet<Service> Books { get; set; }
