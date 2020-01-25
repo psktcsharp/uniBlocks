@@ -8,6 +8,7 @@ namespace AspNetCoreGraph.Models
         this.Subscriptions = new HashSet<Subscription>();
         }
           public int Id { get; set; }
+        public string name { get; set; }
         public virtual ICollection<Subscription> Subscriptions { get; set; }
     }
 }
