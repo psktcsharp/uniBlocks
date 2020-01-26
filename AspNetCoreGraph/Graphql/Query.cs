@@ -10,20 +10,24 @@ namespace AspNetCoreGraph.Graphql
 {
     public class Query
     {
-        [GraphQLMetadata("services")]
-        public IEnumerable<Service> GetServices()
+        private UniBlocksDBContext uniBlocksDBContext;
+        public Query(UniBlocksDBContext uniCont)
         {
-            using(var db = new UniBlocksDBContext())
-            {
-                return db.Services
+            uniBlocksDBContext = uniCont;
+        }
+        [GraphQLMetadata("services")]
+        public IEnumerable<AService> GetServices()
+        {
+          
+                return uniBlocksDBContext.Services
                     .Include(s => s.Subscriptions)
                     .ToList();
-            }
+            
         }
         [GraphQLMetadata("subscriptions")]
         public IEnumerable<Subscription> GetSubscriptions()
         {
-            using (var db = new UniBlocksDBContext())
+            using (var db = uniBlocksDBContext)
             {
                 return db.Subscriptions
                     .Include(sub => sub.Services)

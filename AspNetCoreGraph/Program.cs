@@ -9,10 +9,15 @@ using Microsoft.Extensions.Logging;
 
 namespace AspNetCoreGraph
 {
+   
+
     public class Program
     {
+       
         public static void Main(string[] args)
         {
+            
+          
             CreateHostBuilder(args).Build().Run();
         }
 

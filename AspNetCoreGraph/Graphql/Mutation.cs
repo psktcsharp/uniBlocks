@@ -6,12 +6,17 @@ namespace AspNetCoreGraph.Graphql
     [GraphQLMetadata("Mutation")]
     public class Mutation
     {
-        [GraphQLMetadata("Mutation")]
-        public Service Add(string name)
+        private UniBlocksDBContext uniBlocksDBContext;
+        public Mutation(UniBlocksDBContext uniCont)
         {
-            using(var db = new UniBlocksDBContext())
+            uniBlocksDBContext = uniCont;
+        }
+        [GraphQLMetadata("addService")]
+        public AService Add(string name)
+        {
+            using (var db = uniBlocksDBContext)
             {
-                var service = new Service() { Name = name };
+                var service = new AService() { Name = name };
                 db.Services.Add(service);
                 db.SaveChanges();
                 return service;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AspNetCoreGraph.Controllers
 {
-    [Route("graphql")]
+    [Route("[controller]")]
     [ApiController]
     public class GraphqlController : ControllerBase
     {

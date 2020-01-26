@@ -5,10 +5,7 @@ namespace AspNetCoreGraph.Models
 {
     public class Subscription
     {
-        public Subscription(){
-        this.Services = new HashSet<Service>();        
-        }
-        public int Id { get; set; }
-        public virtual ICollection<Service> Services { get; set; }
+        public int SubscriptionId { get; set; }
+        public ICollection<AService> Services { get; } = new List<AService>();
     }
 }

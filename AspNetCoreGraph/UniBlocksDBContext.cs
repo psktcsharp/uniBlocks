@@ -6,7 +6,6 @@ namespace AspNetCoreGraph
 
     public class UniBlocksDBContext : DbContext
     {
-        public UniBlocksDBContext() { }
         public UniBlocksDBContext(DbContextOptions<UniBlocksDBContext> options)
           : base(options)
         { }
@@ -15,8 +14,15 @@ namespace AspNetCoreGraph
         {
           
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        public DbSet<Service> Services { get; set; }
+            //manulay setting many-to-many relation as EF core doesn't support it yet
+            modelBuilder.Entity<AServiceSubscription>()
+         .HasKey(s => new {  s.ServiceId , s.SubscriptionId });
+        }
+        public DbSet<AService> Services { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
     }
 }
