@@ -6,13 +6,17 @@ namespace AspNetCoreGraph
 
     public class UniBlocksDBContext : DbContext
     {
+
+
         public UniBlocksDBContext(DbContextOptions<UniBlocksDBContext> options)
-          : base(options)
+    : base(options)
         { }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-          
+        //    optionsBuilder.UseSqlServer(@"Data Source=.;Initial Catalog=UniBlocksDB;Integrated Security=True");
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

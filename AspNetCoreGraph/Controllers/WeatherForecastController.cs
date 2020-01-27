@@ -19,6 +19,13 @@ namespace AspNetCoreGraph.Controllers
         public WeatherForecastController(UniBlocksDBContext uniCont)
         {
             uniBlocksDBContext = uniCont;
+
+            //var context = new UniBlocksDBContext();
+
+            //global::System.Console.WriteLine(context.Services);
+
+
+
         }
         private static readonly string[] Summaries = new[]
         {
@@ -50,7 +57,7 @@ namespace AspNetCoreGraph.Controllers
             //uniBlocksDBContext.Add(
             //    new ServiceSubscription { Service = aservice, subscription = aSub });
 
-
+            
             uniBlocksDBContext.SaveChanges();
 
             //var serviceDBEntry = uniBlocksDBContext.Services.Add(

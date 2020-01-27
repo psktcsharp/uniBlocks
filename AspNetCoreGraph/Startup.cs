@@ -28,8 +28,12 @@ namespace AspNetCoreGraph
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<UniBlocksDBContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
+            //services.AddDbContext<UniBlocksDBContext>();
             services.AddMvc(option => option.EnableEndpointRouting = false);
+
+            services.AddDbContext<UniBlocksDBContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<Func<UniBlocksDBContext>>(options => () => options.GetService<UniBlocksDBContext>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

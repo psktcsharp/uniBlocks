@@ -10,8 +10,10 @@ namespace AspNetCoreGraph.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    
     public class GraphqlController : ControllerBase
     {
+
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] GraphQLQuery query)
         {

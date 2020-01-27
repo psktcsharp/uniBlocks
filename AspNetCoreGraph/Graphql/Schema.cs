@@ -1,10 +1,12 @@
 ﻿using GraphQL.Types;
 using GraphQL;
 
+
 namespace AspNetCoreGraph.Graphql
 {
-    public class MySchema
+    public class MySchema : GraphQL.Types.Schema
     {
+ 
         private ISchema _schema { get; set; }
         public ISchema GraphQLSchema
         {
@@ -14,26 +16,28 @@ namespace AspNetCoreGraph.Graphql
             }
         }
 
-        public MySchema()
+        public MySchema() 
         {
             this._schema = Schema.For(@"
           type Subscription {
-            id: ID
-            services: [Service]
+            id: ID,
+            services: [AService]
           }
 
-          type Service {
+          type AService {
             id: ID,
+            Name: String
             subscriptions: [Subscription]
           }
 
           type Mutation {
-            addService(name: String): Service
+            addService(name: String): AService
           }
 
           type Query {
-              services: [Service]
+              services: [AService]
               subscriptions: [Subscription]
+                hello:String
           }
       ", _ =>
             {

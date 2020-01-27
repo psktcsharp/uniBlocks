@@ -5,34 +5,54 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using GraphQL.Types;
 
 namespace AspNetCoreGraph.Graphql
 {
-    public class Query
+    public class Query : ObjectGraphType
     {
-        private UniBlocksDBContext uniBlocksDBContext;
-        public Query(UniBlocksDBContext uniCont)
+        private Func<UniBlocksDBContext> uniDBContext;
+        public Query( Func<UniBlocksDBContext> _uniDBContext)
         {
-            uniBlocksDBContext = uniCont;
+            uniDBContext = _uniDBContext;
         }
         [GraphQLMetadata("services")]
         public IEnumerable<AService> GetServices()
         {
-          
-                return uniBlocksDBContext.Services
-                    .Include(s => s.Subscriptions)
-                    .ToList();
-            
+            FieldAsync<NonNullGraphType<UserType>>(
+              "user",
+              resolve: async context =>
+              {
+                  using (var dc = dataContext())
+                      return await dc
+                          .Users
+                          .FirstAsync(u => u.Id == context.Source.UserId);
+              });
+
+            return uniDBContext().Services;
+
+            //using (var context = new UniBlocksDBContext(
+            //  serviceProvider.GetRequiredService<
+            //      DbContextOptions<RazorPagesMovieContext>>()))
+
+            //    return uniDBContext.Services;
+            //return uniBlocksDBContext.Services
+            //    .Include(s => s.Subscriptions)
+            //    .ToList();
+
         }
         [GraphQLMetadata("subscriptions")]
         public IEnumerable<Subscription> GetSubscriptions()
         {
-            using (var db = uniBlocksDBContext)
-            {
-                return db.Subscriptions
-                    .Include(sub => sub.Services)
-                    .ToList();
-            }
+            return new List<Subscription>();
+            //using (var db = uniblocksdbcontext)
+            //{
+            //    return db.subscriptions
+            //        .include(sub => sub.services)
+            //        .tolist();
+            //}
         }
         [GraphQLMetadata("hello")]
         public string GetHello()
