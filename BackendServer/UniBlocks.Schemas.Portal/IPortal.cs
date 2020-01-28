@@ -29,7 +29,7 @@ namespace UniBlocks.Schemas.Portal
             {
                 return AddAService(new AService
                 {
-                    Name = aservice.Name,
+                    serviceName = aservice.serviceName,
                     AServiceId = aservice.AServiceId
                 });
                 throw new NotImplementedException();

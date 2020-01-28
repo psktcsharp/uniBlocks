@@ -9,6 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreGraph", "..\AspNe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniBlocks.Schemas.Portal", "UniBlocks.Schemas.Portal\UniBlocks.Schemas.Portal.csproj", "{F022C9F7-4A22-4064-B26A-27E86D60FC94}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.Server", "..\..\graphserver\samples\Samples.Server\Samples.Server.csproj", "{2A906EA7-64DD-4523-8007-180DC5B304E8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F022C9F7-4A22-4064-B26A-27E86D60FC94} = {F022C9F7-4A22-4064-B26A-27E86D60FC94}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +32,10 @@ Global
 		{F022C9F7-4A22-4064-B26A-27E86D60FC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F022C9F7-4A22-4064-B26A-27E86D60FC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F022C9F7-4A22-4064-B26A-27E86D60FC94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A906EA7-64DD-4523-8007-180DC5B304E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A906EA7-64DD-4523-8007-180DC5B304E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A906EA7-64DD-4523-8007-180DC5B304E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A906EA7-64DD-4523-8007-180DC5B304E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,7 +2,7 @@
 
 namespace UniBlocks.Schemas.Portal
 {
-    internal class PortalSubscriptions : IObjectGraphType
+    internal class PortalSubscriptions : ObjectGraphType<object>
     {
         private IPortal portal;
 
