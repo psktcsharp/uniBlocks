@@ -55,5 +55,21 @@ namespace HotGraphApi.UniBlocks.Data
             var insertServSubResult= uniBlocks.SaveChangesAsync().Result;
             return insertServSubResult;
         }
+        //Block Mutations
+        public class createBlockbInput
+        {
+            public string BlockName { get; set; }
+            public string Location { get; set; }
+        }
+        public int CreateBlock(
+        createBlockbInput input,
+        [Service]UniBlocksDBContext uniBlocks)
+        {
+            uniBlocks.Database.EnsureCreated();
+            uniBlocks.Add(new Block() { BlockName = input.BlockName, location = input.BlockName });
+            var insertBlockResult = uniBlocks.SaveChangesAsync().Result;
+            return insertBlockResult;
+        }
+
     }  
 }
