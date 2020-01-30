@@ -50,6 +50,7 @@ namespace HotGraphApi
                 .HasForeignKey(pt => pt.UserId);
 
         }
+        public DbSet<ATransaction> Transactions { get; set; }
         public DbSet<AService> Services { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
         public async Task<List<AService>> GetServicesAsync()

@@ -26,7 +26,7 @@ namespace HotGraphApi.UniBlocks.Data
          Subscription input,
          [Service]UniBlocksDBContext uniBlocks)
         {
-            uniBlocks.Database.EnsureDeleted();
+           // uniBlocks.Database.EnsureDeleted();
             uniBlocks.Database.EnsureCreated();
             input.Balance = new Balance();
             uniBlocks.Add(input.Balance);
@@ -67,6 +67,23 @@ namespace HotGraphApi.UniBlocks.Data
         {
             uniBlocks.Database.EnsureCreated();
             uniBlocks.Add(new Block() { BlockName = input.BlockName, location = input.BlockName });
+            var insertBlockResult = uniBlocks.SaveChangesAsync().Result;
+            return insertBlockResult;
+        }
+
+        //Block Mutations
+        //public class createBlockbInput
+        //{
+        //    public string BlockName { get; set; }
+        //    public string Location { get; set; }
+        //}
+        public int CreateTransaction(
+        ATransaction input,
+        [Service]UniBlocksDBContext uniBlocks)
+        {
+           // uniBlocks.Database.EnsureDeleted();
+            uniBlocks.Database.EnsureCreated();
+            uniBlocks.Add(input);
             var insertBlockResult = uniBlocks.SaveChangesAsync().Result;
             return insertBlockResult;
         }
