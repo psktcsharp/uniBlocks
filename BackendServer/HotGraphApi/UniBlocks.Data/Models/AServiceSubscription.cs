@@ -7,6 +7,7 @@ namespace HotGraphApi.UniBlocks.Data.Models
 {
     public class AServiceSubscription
     {
+        public int AServiceSubscriptionId { get; set; }
         public int ServiceId { get; set; }
         public AService Service { get; set; }
 

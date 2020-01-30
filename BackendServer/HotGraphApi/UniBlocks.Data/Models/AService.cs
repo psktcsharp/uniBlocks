@@ -1,14 +1,19 @@
-﻿using System;
+﻿using GraphQL.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HotGraphApi.UniBlocks.Data.Models
 {
-    public class AService
+    public class AService 
     {
+        public AService()
+        {
+            AServiceSubscriptions = new List<AServiceSubscription>();
+        }
         public int AServiceId { get; set; }
-        public string serviceName { get; set; }
-        public ICollection<Subscription> Subscriptions { get; } = new List<Subscription>();
+        public string ServiceName { get; set; }
+        public List<AServiceSubscription> AServiceSubscriptions { get; set; }
     }
 }

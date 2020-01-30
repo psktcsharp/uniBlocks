@@ -34,10 +34,6 @@ namespace HotGraphApi
     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IDataRepository, DataRepository>();
-
-
-
-
             //  services.addser<IDataRepository, DataRepository>();
             services.AddGraphQL(sp => SchemaBuilder.New()
             .AddServices(sp)

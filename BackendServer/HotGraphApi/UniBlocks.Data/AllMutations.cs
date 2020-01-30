@@ -1,5 +1,7 @@
-﻿using HotChocolate;
+﻿using GraphQL.Types;
+using HotChocolate;
 using HotChocolate.Types;
+using HotGraphApi.UniBlocks.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,57 +10,46 @@ using System.Threading.Tasks;
 namespace HotGraphApi.UniBlocks.Data
 {
     [ExtendObjectType(Name = "Mutation")]
-    public class AllMutations : IDisposable
+    public class AllMutations 
     {
-        public async Task<AllPayloads> CreateHello(
-            AllInput input,
-            [Service]IDataRepository dataRepo)
+        //Services Mutations
+        public async Task<string> CreateService(
+          AService input,
+          [Service]UniBlocksDBContext uniBlocks)
         {
-            var newString = input.AnyString;
-            dataRepo.AddMsg(new Models.MsgTest() { storedMsg = newString });
-            return new AllPayloads(newString);
+             uniBlocks.Database.EnsureCreated();
+           var insertService =  await uniBlocks.CreateService(input);
+           return insertService.ServiceName;
         }
-        public async Task<AllServices> ReadServices(
-             [Service]IDataRepository dataRepo, [Service]UniBlocksDBContext uniBlocks
-            )
+        //Subscriptions Mutations
+        public int CreateSubscription(
+         Subscription input,
+         [Service]UniBlocksDBContext uniBlocks)
         {
-            return new AllServices(dataRepo.GetAllServices(uniBlocks));
+            uniBlocks.Database.EnsureCreated();
+            uniBlocks.Subscriptions.Add(input);
+            var insertSubscription = uniBlocks.SaveChangesAsync().Result;
+            return insertSubscription;
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
+        //ServiceSubscriptions Mutations
+        public class updateSubInput
         {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
+            public int subId { get; set; }
+            public int servId { get; set; }
         }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~AllMutations()
-        // {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
+        public int UpdateSubscription(
+         updateSubInput input,
+         [Service]UniBlocksDBContext uniBlocks)
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
+            uniBlocks.Database.EnsureCreated();
+            //get the sub entity to update
+            var subToUpdate = uniBlocks.Subscriptions.Find(input.subId);
+            //get the service entity
+            var serviceToAdd = uniBlocks.Services.Find(input.servId);
+            //add the service by creating a new entry in the joint table AServiceSubscription
+            subToUpdate.AServiceSubscriptions.Add(new AServiceSubscription(){ Service = serviceToAdd, Subscription = subToUpdate });
+            var insertServSubResult= uniBlocks.SaveChangesAsync().Result;
+            return insertServSubResult;
         }
-        #endregion
-    }
+    }  
 }
