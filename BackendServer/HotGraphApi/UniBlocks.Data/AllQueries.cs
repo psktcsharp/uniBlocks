@@ -11,12 +11,11 @@ namespace HotGraphApi.UniBlocks.Data
     [ExtendObjectType(Name = "Query")]
     public class AllQueries 
     {
-        //public async Task<AllServices> ReadServices(
-        //  [Service]UniBlocksDBContext uniBlocks
-        //  )
-        //{
-        //    var result = await uniBlocks.GetServicesAsync();
-        //    return new AllServices(result);
-        //}
+        public async Task<List<AService>> ReadServices(
+          [Service]UniBlocksDBContext uniBlocks
+          )
+        {
+            return new List<AService>();
+        }
     }
 }

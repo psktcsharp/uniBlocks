@@ -10,8 +10,10 @@ namespace HotGraphApi.UniBlocks.Data.Models
         public Subscription()
         {
             AServiceSubscriptions = new List<AServiceSubscription>();
+            Balance = new Balance();
         }
         public int SubscriptionId { get; set; }
+        public Balance Balance { get; set; }
         public ICollection<AServiceSubscription> AServiceSubscriptions { get; set; }
     }
 }

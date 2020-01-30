@@ -45,7 +45,7 @@ namespace HotGraphApi
                 .HasForeignKey(pt => pt.BlockId);
 
             modelBuilder.Entity<BlockUser>()
-                .HasOne(pt => pt.Block)
+                .HasOne(pt => pt.User)
                 .WithMany(t => t.BlockUsers)
                 .HasForeignKey(pt => pt.UserId);
 

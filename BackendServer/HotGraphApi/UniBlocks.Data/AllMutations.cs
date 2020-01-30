@@ -26,8 +26,12 @@ namespace HotGraphApi.UniBlocks.Data
          Subscription input,
          [Service]UniBlocksDBContext uniBlocks)
         {
+            uniBlocks.Database.EnsureDeleted();
             uniBlocks.Database.EnsureCreated();
-            uniBlocks.Subscriptions.Add(input);
+            input.Balance = new Balance();
+            uniBlocks.Add(input.Balance);
+            uniBlocks.Add(input);
+          //  uniBlocks.Subscriptions.Add(input);
             var insertSubscription = uniBlocks.SaveChangesAsync().Result;
             return insertSubscription;
         }
