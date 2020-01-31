@@ -49,10 +49,26 @@ namespace HotGraphApi
                 .WithMany(t => t.BlockUsers)
                 .HasForeignKey(pt => pt.UserId);
 
+            //UserMessages
+            modelBuilder.Entity<UserMessages>()
+     .HasKey(t => new { t.UserId, t.MessageId });
+
+            modelBuilder.Entity<UserMessages>()
+                .HasOne(pt => pt.User)
+                .WithMany(p => p.UserMessages)
+                .HasForeignKey(pt => pt.UserId);
+
+            modelBuilder.Entity<UserMessages>()
+                .HasOne(pt => pt.Message)
+                .WithMany(t => t.UserMessages)
+                .HasForeignKey(pt => pt.MessageId);
+
         }
         public DbSet<ATransaction> Transactions { get; set; }
         public DbSet<AService> Services { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Message> Messages { get; set; }
         public async Task<List<AService>> GetServicesAsync()
         {        
                 return await Services.ToListAsync();   

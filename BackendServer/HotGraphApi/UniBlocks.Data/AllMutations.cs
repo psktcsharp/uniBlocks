@@ -56,13 +56,13 @@ namespace HotGraphApi.UniBlocks.Data
             return insertServSubResult;
         }
         //Block Mutations
-        public class createBlockbInput
+        public class createBlockInput
         {
             public string BlockName { get; set; }
             public string Location { get; set; }
         }
         public int CreateBlock(
-        createBlockbInput input,
+        createBlockInput input,
         [Service]UniBlocksDBContext uniBlocks)
         {
             uniBlocks.Database.EnsureCreated();
@@ -70,13 +70,7 @@ namespace HotGraphApi.UniBlocks.Data
             var insertBlockResult = uniBlocks.SaveChangesAsync().Result;
             return insertBlockResult;
         }
-
-        //Block Mutations
-        //public class createBlockbInput
-        //{
-        //    public string BlockName { get; set; }
-        //    public string Location { get; set; }
-        //}
+        //Transaction Mutations
         public int CreateTransaction(
         ATransaction input,
         [Service]UniBlocksDBContext uniBlocks)
@@ -87,6 +81,58 @@ namespace HotGraphApi.UniBlocks.Data
             var insertBlockResult = uniBlocks.SaveChangesAsync().Result;
             return insertBlockResult;
         }
+        //Message Mutations
+        public class createMessageInput
+        {
+            public createMessageInput()
+            {
+                ToList = new List<int>();
+            }
+            public string content { get; set; }
+            public int senderId { get; set; }
+            public List<int> ToList { get; set; }
+        }
+        public int CreateMessage(
+       createMessageInput input,
+       [Service]UniBlocksDBContext uniBlocks)
+        {
+            //uniBlocks.Database.EnsureDeleted();
+            uniBlocks.Database.EnsureCreated();
+            //get sender entity based on id
+            var sender = uniBlocks.Users.Find(input.senderId);
+            //get the list of users that the message will be sent to
+            var ToList = new List<User>();
+            foreach (var id in input.ToList)
+            {
+                ToList.Add(uniBlocks.Users.Find(id));
+            }
+           
+            var msgToSend = new Message();
+            msgToSend.content = input.content;
+            msgToSend.Sender = sender;
+            //save message to database to get an id and be able to usermessages into it
+            uniBlocks.SaveChangesAsync();
 
-    }  
+            //save the usermessges
+            foreach (var user in ToList)
+            {
+                msgToSend.UserMessages.Add(new UserMessages() { Message = msgToSend, User = user });
+            }
+            uniBlocks.Update(msgToSend);
+            var insertMsgResult = uniBlocks.SaveChangesAsync().Result;
+            return insertMsgResult;
+        }
+
+        //User Mutations
+        public int CreateUser(
+      User input,
+      [Service]UniBlocksDBContext uniBlocks)
+        {
+           // uniBlocks.Database.EnsureDeleted();
+            uniBlocks.Database.EnsureCreated();
+            uniBlocks.Add(input);
+            var insertUserResult = uniBlocks.SaveChangesAsync().Result;
+            return insertUserResult;
+        }
+    }
 }

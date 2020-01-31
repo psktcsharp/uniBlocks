@@ -58,6 +58,7 @@ namespace HotGraphApi
 
             app.UseGraphQL();
             app.UsePlayground();
+            
         }
         
     }
