@@ -56,8 +56,8 @@ namespace HotGraphApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseGraphQL();
-            app.UsePlayground();
+            app.UseGraphQL("/graphql");
+           // app.UsePlayground();
             
         }
         

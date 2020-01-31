@@ -69,6 +69,8 @@ namespace HotGraphApi
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Balance> Balances { get; set; }
+        public DbSet<AServiceSubscription> AServiceSubscriptions { get; set; }
         public async Task<List<AService>> GetServicesAsync()
         {        
                 return await Services.ToListAsync();   

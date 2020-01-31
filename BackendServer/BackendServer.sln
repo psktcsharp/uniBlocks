@@ -14,7 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.Server", "..\..\gra
 		{F022C9F7-4A22-4064-B26A-27E86D60FC94} = {F022C9F7-4A22-4064-B26A-27E86D60FC94}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotGraphApi", "HotGraphApi\HotGraphApi.csproj", "{A5435158-C9B4-4CBA-A18C-ED747A608B86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotGraphApi", "HotGraphApi\HotGraphApi.csproj", "{A5435158-C9B4-4CBA-A18C-ED747A608B86}"
+EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "TestServer", "TestServer\TestServer.njsproj", "{9FCC0B06-95DD-476F-9A92-9A39F0019DC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +44,10 @@ Global
 		{A5435158-C9B4-4CBA-A18C-ED747A608B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5435158-C9B4-4CBA-A18C-ED747A608B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5435158-C9B4-4CBA-A18C-ED747A608B86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FCC0B06-95DD-476F-9A92-9A39F0019DC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FCC0B06-95DD-476F-9A92-9A39F0019DC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FCC0B06-95DD-476F-9A92-9A39F0019DC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FCC0B06-95DD-476F-9A92-9A39F0019DC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

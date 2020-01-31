@@ -2,7 +2,6 @@
 {
     public class BlockUser
     {
-        public int BlockUserId { get; set; }
         public int BlockId { get; set; }
         public int UserId { get; set; }
 

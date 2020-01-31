@@ -2,6 +2,7 @@
 using HotChocolate;
 using HotChocolate.Types;
 using HotGraphApi.UniBlocks.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,17 +71,6 @@ namespace HotGraphApi.UniBlocks.Data
             var insertBlockResult = uniBlocks.SaveChangesAsync().Result;
             return insertBlockResult;
         }
-        //Transaction Mutations
-        public int CreateTransaction(
-        ATransaction input,
-        [Service]UniBlocksDBContext uniBlocks)
-        {
-           // uniBlocks.Database.EnsureDeleted();
-            uniBlocks.Database.EnsureCreated();
-            uniBlocks.Add(input);
-            var insertBlockResult = uniBlocks.SaveChangesAsync().Result;
-            return insertBlockResult;
-        }
         //Message Mutations
         public class createMessageInput
         {
@@ -122,17 +112,60 @@ namespace HotGraphApi.UniBlocks.Data
             var insertMsgResult = uniBlocks.SaveChangesAsync().Result;
             return insertMsgResult;
         }
+        //Transaction Mutations
+        public class createTransactionInput
+        {
+         
+            public int ServiceId { get; set; }
+            public int SubscriptionId { get; set; }
+            public decimal Amount { get; set; }
+            public string TransactionType { get; set; }
+        }
+        public async Task<int> CreateTransaction(
+         createTransactionInput input,
+         [Service]UniBlocksDBContext uniBlocks)
+        {
+            // uniBlocks.Database.EnsureDeleted();
+            uniBlocks.Database.EnsureCreated();
+            //create transaction
+            var transactionToSave = new ATransaction();
+            transactionToSave.Amount = input.Amount;
+            transactionToSave.TransactionType = input.TransactionType;
+            //save to database to get id
+            uniBlocks.Add(transactionToSave);
+           await uniBlocks.SaveChangesAsync();
+            //get AServiceSubscription entity to add while creating the invoice
+            var aServiceSubscription = uniBlocks.AServiceSubscriptions.Where(ss => ss.SubscriptionId == input.SubscriptionId & ss.ServiceId == input.ServiceId).FirstOrDefault();
+            //create invoice
+            var invoiceToSave = new Invoice();
+            invoiceToSave.AServiceSubscription = aServiceSubscription;
+            invoiceToSave.Transaction = transactionToSave;
+            //save to database 
+            uniBlocks.Add(invoiceToSave);
+            await uniBlocks.SaveChangesAsync();
+           
+            //effect the balance with the amount ; todo
+            //get the subscription
+            uniBlocks.Subscriptions.Find(aServiceSubscription.SubscriptionId);
+            //get the balance
+
+            var balanceToEffect = uniBlocks.Subscriptions.Include("Balance").Where(sub => sub.SubscriptionId == aServiceSubscription.SubscriptionId).First().Balance;
+            balanceToEffect.value += transactionToSave.Amount;
+            //save the new balance
+            var saveBalanceResult = await uniBlocks.SaveChangesAsync();
+            return saveBalanceResult;
+        }
 
         //User Mutations
         public int CreateUser(
-      User input,
-      [Service]UniBlocksDBContext uniBlocks)
-        {
-           // uniBlocks.Database.EnsureDeleted();
-            uniBlocks.Database.EnsureCreated();
-            uniBlocks.Add(input);
-            var insertUserResult = uniBlocks.SaveChangesAsync().Result;
-            return insertUserResult;
-        }
+             User input,
+             [Service]UniBlocksDBContext uniBlocks)
+            {
+                uniBlocks.Database.EnsureDeleted();
+                uniBlocks.Database.EnsureCreated();
+                uniBlocks.Add(input);
+                var insertUserResult = uniBlocks.SaveChangesAsync().Result;
+                return insertUserResult;
+            }
     }
 }
