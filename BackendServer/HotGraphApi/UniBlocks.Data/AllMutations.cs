@@ -66,6 +66,7 @@ namespace HotGraphApi.UniBlocks.Data
             public int SubscriptionId { get; set; }
             public bool IsActive { get; set; }
         }
+        //--= update subscription info - use update subscriptionwithservice if you want to edit the services 
         public int UpdateSubscriptionInfo(
           Subscription input,
          [Service]UniBlocksDBContext uniBlocks)
@@ -113,6 +114,22 @@ namespace HotGraphApi.UniBlocks.Data
             uniBlocks.Add(new Block() { BlockName = input.BlockName, location = input.BlockName });
             var insertBlockResult = uniBlocks.SaveChangesAsync().Result;
             return insertBlockResult;
+        }
+        // -- update block info
+        public int UpdateBlockInfo(
+         Block input,
+        [Service]UniBlocksDBContext uniBlocks)
+        {
+            uniBlocks.Database.EnsureCreated();
+            //get the block
+            var toUpdateBlock = uniBlocks.Blocks.Find(input.BlockId);
+            //update 
+            toUpdateBlock.BlockName = input.BlockName;
+            toUpdateBlock.isActive = input.isActive;
+            toUpdateBlock.location = input.location;
+            //save to the database
+            var updateBlock = uniBlocks.SaveChangesAsync().Result;
+            return updateBlock;
         }
         // Message Mutations
         public class createMessageInput

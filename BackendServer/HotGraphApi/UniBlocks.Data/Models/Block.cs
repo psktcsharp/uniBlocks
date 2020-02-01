@@ -10,10 +10,12 @@ namespace HotGraphApi.UniBlocks.Data.Models
         public Block()
         {
             BlockUsers = new List<BlockUser>();
+            isActive = true;
         }
         public int BlockId { get; set; }
         public string BlockName { get; set; }
         public string location { get; set; }
+        public bool isActive { get; set; }
 
         public ICollection<BlockUser> BlockUsers { get; set; }
 
