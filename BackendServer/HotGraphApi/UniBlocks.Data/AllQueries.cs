@@ -12,13 +12,34 @@ namespace HotGraphApi.UniBlocks.Data
     [ExtendObjectType(Name = "Query")]
     public class AllQueries 
     {
-        public async Task<List<User>> GetMessages(
+        // User Queries
+        //--= get all users with messages 
+        public List<User> GetUsers(
           [Service]UniBlocksDBContext uniBlocks
           )
         {
-
-            return uniBlocks.Users
+            return  uniBlocks.Users
                 .Include(user => user.UserMessages).ThenInclude(userMessage => userMessage.Message).ToList();
         }
+        //--= get User by id
+        public User GetUser(int userId,[Service]UniBlocksDBContext uniBlocks)
+        {
+            return uniBlocks.Users.Find(userId);
+        }
+        // Block Queries
+        //--= get all blocks 
+        public List<Block> GetBlocks(
+          [Service]UniBlocksDBContext uniBlocks
+          )
+        {
+            return uniBlocks.Blocks
+               .ToList();
+        }
+        //--= get block by id
+        public Block GetBlock(int blockId, [Service]UniBlocksDBContext uniBlocks)
+        {
+            return uniBlocks.Blocks.Find(blockId);
+        }
+
     }
 }
