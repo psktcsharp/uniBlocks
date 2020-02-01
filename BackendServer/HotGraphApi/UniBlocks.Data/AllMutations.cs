@@ -240,7 +240,7 @@ namespace HotGraphApi.UniBlocks.Data
              User input,
              [Service]UniBlocksDBContext uniBlocks)
             {
-                uniBlocks.Database.EnsureDeleted();
+                //uniBlocks.Database.EnsureDeleted();
                 uniBlocks.Database.EnsureCreated();
                 uniBlocks.Add(input);
                 var insertUserResult = await uniBlocks.SaveChangesAsync();

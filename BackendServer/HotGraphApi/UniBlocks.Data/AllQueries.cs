@@ -13,16 +13,42 @@ namespace HotGraphApi.UniBlocks.Data
     public class AllQueries 
     {
         // User Queries
-        //--= get all users with messages 
-        public List<User> GetUsers(
+        //--= get all users with subs
+        public List<User> GetUsersWithSubs(
           [Service]UniBlocksDBContext uniBlocks
           )
         {
-            return  uniBlocks.Users
-                .Include(user => user.UserMessages).ThenInclude(userMessage => userMessage.Message).ToList();
+            //due to a bug in ef core this will solve loading subs with user 
+            //load both lists
+            var userList = uniBlocks.Users.ToList();
+            var subs = uniBlocks.Subscriptions.Include("User").ToList();
+            //loop through every use and detache from the context to avoid reader is open bug
+            foreach (var user in userList)
+            {
+                uniBlocks.Entry(user).State = EntityState.Detached;
+                //loop through the subs and add to the user.subs list based on matching id
+                foreach (var sub in subs)
+                {
+                    uniBlocks.Entry(sub).State = EntityState.Detached;
+                    if (user.UserId == sub.UserId)
+                    {
+                        user.Subscriptions.Add(sub);
+                    }
+                }
+            }
+            return userList.ToList();  
         }
-        //--= get User by id
-        public User GetUser(int userId,[Service]UniBlocksDBContext uniBlocks)
+        // User Queries
+        //--= get all users with messages
+        public List<User> GetUsersWithMessages(
+         [Service]UniBlocksDBContext uniBlocks
+         )
+        {
+            return uniBlocks.Users
+               .Include(user => user.UserMessages).ThenInclude(userMessage => userMessage.Message).ToList();
+        }
+            //--= get User by id
+            public User GetUser(int userId,[Service]UniBlocksDBContext uniBlocks)
         {
             return uniBlocks.Users.Find(userId);
         }
@@ -32,15 +58,16 @@ namespace HotGraphApi.UniBlocks.Data
           [Service]UniBlocksDBContext uniBlocks
           )
         {
-           var blockList = uniBlocks.Blocks.Include(b => b.BlockSubscriptions).ThenInclude(bs => bs.Subscription).ThenInclude(sub => sub.User)
-               .ToList();
+            var blockList = uniBlocks.Blocks.Include(b => b.BlockSubscriptions).ThenInclude(bs => bs.Subscription).ThenInclude(sub => sub.User)
+                .ToList();
             //get user info for each sub to attach to the list
-          
+
             return blockList;
         }
         //--= get block by id with it's subscriptions
         public Block GetBlock(int blockId, [Service]UniBlocksDBContext uniBlocks)
         {
+
             return uniBlocks.Blocks.Include(b => b.BlockSubscriptions).ThenInclude(bs => bs.Subscription).ThenInclude(sub => sub.User).
                 Where(b => b.BlockId == blockId).First();
         }
@@ -65,14 +92,15 @@ namespace HotGraphApi.UniBlocks.Data
           [Service]UniBlocksDBContext uniBlocks
           )
         {
+
             return uniBlocks.Subscriptions.Include(s => s.User)
                .ToList();
         }
         //--= get subscription by id
-        //public AService GetService(int serviceId, [Service]UniBlocksDBContext uniBlocks)
-        //{
-        //    return uniBlocks.Services.Find(serviceId);
-        //}
+        public Subscription GetSubscription(int subscriptionId, [Service]UniBlocksDBContext uniBlocks)
+        {
+            return uniBlocks.Subscriptions.Find(subscriptionId);
+        }
 
 
     }
