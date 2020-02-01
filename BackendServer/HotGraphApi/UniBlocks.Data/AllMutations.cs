@@ -22,6 +22,30 @@ namespace HotGraphApi.UniBlocks.Data
            var insertService =  await uniBlocks.CreateService(input);
            return insertService.ServiceName;
         }
+        // -- update service
+        public async Task<int> UpdateService(
+         AService input,
+         [Service]UniBlocksDBContext uniBlocks)
+        {      
+            uniBlocks.Database.EnsureCreated();     
+            uniBlocks.Services.Update(input);
+            var updateResult = await uniBlocks.SaveChangesAsync();
+            return updateResult;
+        }
+        // --  update service state 
+        public Task<int> UpdateServiceState(
+        int ServiceId,bool ServiceState,
+        [Service]UniBlocksDBContext uniBlocks)
+        { 
+            uniBlocks.Database.EnsureCreated();
+            //get the service
+            var serviceToUpdate = uniBlocks.Services.Find(ServiceId);
+            //change state 
+            serviceToUpdate.IsActive = ServiceState;
+             //update db
+             var updateResult =  uniBlocks.SaveChangesAsync();
+            return updateResult;
+        }
         // Subscriptions Mutations
         public int CreateSubscription(
          Subscription input,
