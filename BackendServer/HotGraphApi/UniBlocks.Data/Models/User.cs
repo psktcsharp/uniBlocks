@@ -12,6 +12,7 @@ namespace HotGraphApi.UniBlocks.Data.Models
         {
             BlockUsers = new List<BlockUser>();
             UserMessages = new List<UserMessages>();
+         
         }
         public int UserId { get; set; }
         [Required]
@@ -22,6 +23,7 @@ namespace HotGraphApi.UniBlocks.Data.Models
         public string PhoneNumber { get; set; }
 
         public ICollection<BlockUser> BlockUsers { get; set; }
+      
         public ICollection<UserMessages> UserMessages { get; set; }
 
     }

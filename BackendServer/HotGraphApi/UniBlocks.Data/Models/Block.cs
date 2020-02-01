@@ -10,6 +10,7 @@ namespace HotGraphApi.UniBlocks.Data.Models
         public Block()
         {
             BlockUsers = new List<BlockUser>();
+            BlockSubscriptions = new List<BlockSubscriptions>();
             isActive = true;
         }
         public int BlockId { get; set; }
@@ -17,6 +18,7 @@ namespace HotGraphApi.UniBlocks.Data.Models
         public string location { get; set; }
         public bool isActive { get; set; }
 
+        public ICollection<BlockSubscriptions> BlockSubscriptions { get; set; }
         public ICollection<BlockUser> BlockUsers { get; set; }
 
     }

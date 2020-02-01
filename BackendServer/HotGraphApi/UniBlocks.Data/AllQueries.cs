@@ -35,11 +35,43 @@ namespace HotGraphApi.UniBlocks.Data
             return uniBlocks.Blocks
                .ToList();
         }
-        //--= get block by id
+        //--= get block by id with it's subscriptions
         public Block GetBlock(int blockId, [Service]UniBlocksDBContext uniBlocks)
         {
-            return uniBlocks.Blocks.Find(blockId);
+            //return uniBlocks.Blocks.Include(b => b.).
+            //    Where(b => b.BlockId == blockId).First();
+            return new Block();
         }
+        // Service Queries
+        //--= get all services with the subscriptions
+        public List<AService> GetServices(
+          [Service]UniBlocksDBContext uniBlocks
+          )
+        {
+            return uniBlocks.Services.Include(s => s.AServiceSubscriptions).ThenInclude(ss => ss.Subscription)
+               .ToList();
+        }
+        //--= get service by id
+        public AService GetService(int serviceId, [Service]UniBlocksDBContext uniBlocks)
+        {
+            return uniBlocks.Services.Include(s => s.AServiceSubscriptions).ThenInclude(ss => ss.Subscription).
+                Where(s => s.AServiceId == serviceId).First();
+        }
+        // Subscriptions Queries
+        //--= get all subscriptions with the user
+        public List<Subscription> GetSubscription(
+          [Service]UniBlocksDBContext uniBlocks
+          )
+        {
+            return uniBlocks.Subscriptions.Include(s => s.User)
+               .ToList();
+        }
+        //--= get subscription by id
+        public AService GetService(int serviceId, [Service]UniBlocksDBContext uniBlocks)
+        {
+            return uniBlocks.Services.Find(serviceId);
+        }
+
 
     }
 }
