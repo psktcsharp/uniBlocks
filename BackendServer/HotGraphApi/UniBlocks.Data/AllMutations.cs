@@ -60,21 +60,21 @@ namespace HotGraphApi.UniBlocks.Data
             var insertSubscription = uniBlocks.SaveChangesAsync().Result;
             return insertSubscription;
         }
-        //--= Dsiable Subscriptions state
+        //--= Disable subscription state
         public class updateSubStateInput
         {
             public int SubscriptionId { get; set; }
             public bool IsActive { get; set; }
         }
-        public int EnableSubscription(
-          updateSubStateInput input,
+        public int UpdateSubscriptionInfo(
+          Subscription input,
          [Service]UniBlocksDBContext uniBlocks)
         {
             uniBlocks.Database.EnsureCreated();
             //get the Subscription
             var toUpdateSub = uniBlocks.Subscriptions.Find(input.SubscriptionId);
-            //update it's state
-            toUpdateSub.IsActive = input.IsActive;
+            //update 
+            toUpdateSub.SubscriptionName = input.SubscriptionName;
             //save to the database
             var updateSubscription = uniBlocks.SaveChangesAsync().Result;
             return updateSubscription;
@@ -85,7 +85,7 @@ namespace HotGraphApi.UniBlocks.Data
             public int subId { get; set; }
             public int servId { get; set; }
         }
-        public int UpdateSubscription(
+        public int UpdateSubscriptionWithService(
          updateSubInput input,
          [Service]UniBlocksDBContext uniBlocks)
         {

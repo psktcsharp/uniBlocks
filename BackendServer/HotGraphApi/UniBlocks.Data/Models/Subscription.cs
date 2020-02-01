@@ -13,6 +13,7 @@ namespace HotGraphApi.UniBlocks.Data.Models
             Balance = new Balance();
         }
         public int SubscriptionId { get; set; }
+        public string SubscriptionName { get; set; }
         public Balance Balance { get; set; }
         public bool IsActive { get; set; }
         public ICollection<AServiceSubscription> AServiceSubscriptions { get; set; }
