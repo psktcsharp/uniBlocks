@@ -13,7 +13,7 @@ namespace HotGraphApi.UniBlocks.Data
     [ExtendObjectType(Name = "Mutation")]
     public class AllMutations 
     {
-        //Services Mutations
+        // Services Mutations
         public async Task<string> CreateService(
           AService input,
           [Service]UniBlocksDBContext uniBlocks)
@@ -22,7 +22,7 @@ namespace HotGraphApi.UniBlocks.Data
            var insertService =  await uniBlocks.CreateService(input);
            return insertService.ServiceName;
         }
-        //Subscriptions Mutations
+        // Subscriptions Mutations
         public int CreateSubscription(
          Subscription input,
          [Service]UniBlocksDBContext uniBlocks)
@@ -32,11 +32,30 @@ namespace HotGraphApi.UniBlocks.Data
             input.Balance = new Balance();
             uniBlocks.Add(input.Balance);
             uniBlocks.Add(input);
-          //  uniBlocks.Subscriptions.Add(input);
+           // uniBlocks.Subscriptions.Add(input);
             var insertSubscription = uniBlocks.SaveChangesAsync().Result;
             return insertSubscription;
         }
-        //ServiceSubscriptions Mutations
+        //--= Dsiable Subscriptions state
+        public class updateSubStateInput
+        {
+            public int SubscriptionId { get; set; }
+            public bool IsActive { get; set; }
+        }
+        public int EnableSubscription(
+          updateSubStateInput input,
+         [Service]UniBlocksDBContext uniBlocks)
+        {
+            uniBlocks.Database.EnsureCreated();
+            //get the Subscription
+            var toUpdateSub = uniBlocks.Subscriptions.Find(input.SubscriptionId);
+            //update it's state
+            toUpdateSub.IsActive = input.IsActive;
+            //save to the database
+            var updateSubscription = uniBlocks.SaveChangesAsync().Result;
+            return updateSubscription;
+        }
+        // ServiceSubscriptions Mutations
         public class updateSubInput
         {
             public int subId { get; set; }
@@ -47,16 +66,16 @@ namespace HotGraphApi.UniBlocks.Data
          [Service]UniBlocksDBContext uniBlocks)
         {
             uniBlocks.Database.EnsureCreated();
-            //get the sub entity to update
+            // get the sub entity to update
             var subToUpdate = uniBlocks.Subscriptions.Find(input.subId);
-            //get the service entity
+            // get the service entity
             var serviceToAdd = uniBlocks.Services.Find(input.servId);
-            //add the service by creating a new entry in the joint table AServiceSubscription
+            // add the service by creating a new entry in the joint table AServiceSubscription
             subToUpdate.AServiceSubscriptions.Add(new AServiceSubscription(){ Service = serviceToAdd, Subscription = subToUpdate });
             var insertServSubResult= uniBlocks.SaveChangesAsync().Result;
             return insertServSubResult;
         }
-        //Block Mutations
+        // Block Mutations
         public class createBlockInput
         {
             public string BlockName { get; set; }
@@ -71,7 +90,7 @@ namespace HotGraphApi.UniBlocks.Data
             var insertBlockResult = uniBlocks.SaveChangesAsync().Result;
             return insertBlockResult;
         }
-        //Message Mutations
+        // Message Mutations
         public class createMessageInput
         {
             public createMessageInput()
@@ -115,7 +134,6 @@ namespace HotGraphApi.UniBlocks.Data
         //Transaction Mutations
         public class createTransactionInput
         {
-         
             public int ServiceId { get; set; }
             public int SubscriptionId { get; set; }
             public decimal Amount { get; set; }
@@ -157,14 +175,14 @@ namespace HotGraphApi.UniBlocks.Data
         }
 
         //User Mutations
-        public int CreateUser(
+        public async Task<int> CreateUser(
              User input,
              [Service]UniBlocksDBContext uniBlocks)
             {
                 uniBlocks.Database.EnsureDeleted();
                 uniBlocks.Database.EnsureCreated();
                 uniBlocks.Add(input);
-                var insertUserResult = uniBlocks.SaveChangesAsync().Result;
+                var insertUserResult = await uniBlocks.SaveChangesAsync();
                 return insertUserResult;
             }
     }

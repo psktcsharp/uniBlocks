@@ -28,10 +28,8 @@ namespace HotGraphApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
-
             services.AddDbContextPool<UniBlocksDBContext>(options =>
-    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IDataRepository, DataRepository>();
             //  services.addser<IDataRepository, DataRepository>();
@@ -41,23 +39,19 @@ namespace HotGraphApi
                  .AddMutationType(d => d.Name("Mutation"))
                 .AddType<AllQueries>()
                 .AddType<AllMutations>()
-                .Create());
-             
+                .Create());       
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Create the database if it doesn't exist
-          
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseGraphQL("/graphql");
-           // app.UsePlayground();
+            app.UseGraphQL();
+            app.UsePlayground();
             
         }
         
