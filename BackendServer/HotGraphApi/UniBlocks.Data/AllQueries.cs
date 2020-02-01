@@ -32,15 +32,17 @@ namespace HotGraphApi.UniBlocks.Data
           [Service]UniBlocksDBContext uniBlocks
           )
         {
-            return uniBlocks.Blocks
+           var blockList = uniBlocks.Blocks.Include(b => b.BlockSubscriptions).ThenInclude(bs => bs.Subscription).ThenInclude(sub => sub.User)
                .ToList();
+            //get user info for each sub to attach to the list
+          
+            return blockList;
         }
         //--= get block by id with it's subscriptions
         public Block GetBlock(int blockId, [Service]UniBlocksDBContext uniBlocks)
         {
-            //return uniBlocks.Blocks.Include(b => b.).
-            //    Where(b => b.BlockId == blockId).First();
-            return new Block();
+            return uniBlocks.Blocks.Include(b => b.BlockSubscriptions).ThenInclude(bs => bs.Subscription).ThenInclude(sub => sub.User).
+                Where(b => b.BlockId == blockId).First();
         }
         // Service Queries
         //--= get all services with the subscriptions
@@ -67,10 +69,10 @@ namespace HotGraphApi.UniBlocks.Data
                .ToList();
         }
         //--= get subscription by id
-        public AService GetService(int serviceId, [Service]UniBlocksDBContext uniBlocks)
-        {
-            return uniBlocks.Services.Find(serviceId);
-        }
+        //public AService GetService(int serviceId, [Service]UniBlocksDBContext uniBlocks)
+        //{
+        //    return uniBlocks.Services.Find(serviceId);
+        //}
 
 
     }

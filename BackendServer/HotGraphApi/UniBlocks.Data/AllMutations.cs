@@ -100,6 +100,26 @@ namespace HotGraphApi.UniBlocks.Data
             var insertServSubResult= uniBlocks.SaveChangesAsync().Result;
             return insertServSubResult;
         }
+        // BlockSubscriptions Mutations
+        public class updateBlockSubInput
+        {
+            public int subId { get; set; }
+            public int blockId { get; set; }
+        }
+        public int UpdateSubscriptionWithBlock(
+         updateBlockSubInput input,
+         [Service]UniBlocksDBContext uniBlocks)
+        {
+            uniBlocks.Database.EnsureCreated();
+            // get the sub entity to update
+            var subToUpdate = uniBlocks.Subscriptions.Find(input.subId);
+            // get the service entity
+            var blockToAdd = uniBlocks.Blocks.Find(input.blockId);
+            // add the block by creating a new entry in the joint table BlockSubscriptions
+            subToUpdate.BlockSubscriptions.Add(new BlockSubscriptions() { Block = blockToAdd, Subscription = subToUpdate });
+            var insertSubBlockResult = uniBlocks.SaveChangesAsync().Result;
+            return insertSubBlockResult;
+        }
         // Block Mutations
         public class createBlockInput
         {

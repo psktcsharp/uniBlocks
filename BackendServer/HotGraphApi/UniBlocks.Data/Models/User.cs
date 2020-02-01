@@ -22,6 +22,7 @@ namespace HotGraphApi.UniBlocks.Data.Models
         public bool isAdmin { get; set; }
         public string PhoneNumber { get; set; }
 
+        public ICollection<Subscription> Subscriptions { get; set; }
         public ICollection<BlockUser> BlockUsers { get; set; }
       
         public ICollection<UserMessages> UserMessages { get; set; }
