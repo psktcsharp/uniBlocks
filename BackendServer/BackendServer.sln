@@ -3,20 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "BackendServer", "BackendServer\BackendServer.njsproj", "{D9526BDE-4BAC-41AD-A811-190BBDDF6F02}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreGraph", "..\AspNetCoreGraph\AspNetCoreGraph.csproj", "{58664EEE-4147-416F-A6A3-0034588F49FA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniBlocks.Schemas.Portal", "UniBlocks.Schemas.Portal\UniBlocks.Schemas.Portal.csproj", "{F022C9F7-4A22-4064-B26A-27E86D60FC94}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.Server", "..\..\graphserver\samples\Samples.Server\Samples.Server.csproj", "{2A906EA7-64DD-4523-8007-180DC5B304E8}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F022C9F7-4A22-4064-B26A-27E86D60FC94} = {F022C9F7-4A22-4064-B26A-27E86D60FC94}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotGraphApi", "HotGraphApi\HotGraphApi.csproj", "{A5435158-C9B4-4CBA-A18C-ED747A608B86}"
-EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "TestServer", "TestServer\TestServer.njsproj", "{9FCC0B06-95DD-476F-9A92-9A39F0019DC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,30 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D9526BDE-4BAC-41AD-A811-190BBDDF6F02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9526BDE-4BAC-41AD-A811-190BBDDF6F02}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9526BDE-4BAC-41AD-A811-190BBDDF6F02}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9526BDE-4BAC-41AD-A811-190BBDDF6F02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{58664EEE-4147-416F-A6A3-0034588F49FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58664EEE-4147-416F-A6A3-0034588F49FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58664EEE-4147-416F-A6A3-0034588F49FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58664EEE-4147-416F-A6A3-0034588F49FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F022C9F7-4A22-4064-B26A-27E86D60FC94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F022C9F7-4A22-4064-B26A-27E86D60FC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F022C9F7-4A22-4064-B26A-27E86D60FC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F022C9F7-4A22-4064-B26A-27E86D60FC94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A906EA7-64DD-4523-8007-180DC5B304E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A906EA7-64DD-4523-8007-180DC5B304E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A906EA7-64DD-4523-8007-180DC5B304E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A906EA7-64DD-4523-8007-180DC5B304E8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A5435158-C9B4-4CBA-A18C-ED747A608B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A5435158-C9B4-4CBA-A18C-ED747A608B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5435158-C9B4-4CBA-A18C-ED747A608B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5435158-C9B4-4CBA-A18C-ED747A608B86}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9FCC0B06-95DD-476F-9A92-9A39F0019DC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FCC0B06-95DD-476F-9A92-9A39F0019DC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FCC0B06-95DD-476F-9A92-9A39F0019DC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FCC0B06-95DD-476F-9A92-9A39F0019DC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
