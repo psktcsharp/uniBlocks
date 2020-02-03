@@ -1,0 +1,44 @@
+﻿@page "/block-subscriptions"
+@layout MainLayout
+@inherits UniBlocksGraph.Pages.BlockSubscriptionsComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using UniBlocksGraph.Models.UniSql
+@using Microsoft.AspNetCore.Identity
+@using UniBlocksGraph.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Block Subscriptions">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getBlockSubscriptionsResult)" TItem="UniBlocksGraph.Models.UniSql.BlockSubscription" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.BlockSubscription" Context="uniBlocksGraphModelsUniSqlBlockSubscription" Property="BlockId" SortProperty="Block.BlockName" FilterProperty="Block.BlockName" Title="Block">
+              <Template Context="data">
+              @(data.Block?.BlockName)
+              </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.BlockSubscription" Context="uniBlocksGraphModelsUniSqlBlockSubscription" Property="SubscriptionId" SortProperty="Subscription.SubscriptionName" FilterProperty="Subscription.SubscriptionName" Title="Subscription">
+              <Template Context="data">
+              @(data.Subscription?.SubscriptionName)
+              </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.BlockSubscription" Context="uniBlocksGraphModelsUniSqlBlockSubscription" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+              <Template Context="uniBlocksGraphModelsUniSqlBlockSubscription">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlBlockSubscription))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

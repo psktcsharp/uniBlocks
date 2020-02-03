@@ -1,0 +1,251 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "A Service Subscription",
+                              "component": "AServiceSubscriptionServiceId",
+                              "name": "AServiceSubscriptionServiceIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getAServiceSubscriptionsResult}",
+                              "textProperty": "ServiceId",
+                              "valueProperty": "ServiceId",
+                              "placeholder": "Choose AServiceSubscription",
+                              "valueType": "int?",
+                              "type": "dropdown",
+                              "name": "AServiceSubscriptionServiceId",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "value": "${invoice.AServiceSubscriptionServiceId}"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "A Service Subscription Subscription Id",
+                              "component": "AServiceSubscriptionSubscriptionId",
+                              "name": "AServiceSubscriptionSubscriptionIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "valueType": "int?",
+                              "type": "numeric",
+                              "name": "AServiceSubscriptionSubscriptionId",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "value": "${invoice.AServiceSubscriptionSubscriptionId}"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Transaction",
+                              "component": "TransactionATransactionId",
+                              "name": "TransactionATransactionIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getTransactionsResult}",
+                              "textProperty": "TransactionType",
+                              "valueProperty": "ATransactionId",
+                              "placeholder": "Choose Transaction",
+                              "valueType": "int?",
+                              "type": "dropdown",
+                              "name": "TransactionATransactionId",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "value": "${invoice.TransactionATransactionId}"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new Invoice!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "UniSQL.createInvoice",
+                        "parameters": [
+                          {
+                            "name": "Invoice",
+                            "value": "${invoice}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${invoice}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "data": "${invoice}",
+                  "visible": "${invoice != null}",
+                  "itemType": "UniBlocksGraph.Models.UniSql.Invoice"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "UniSQL.getAServiceSubscriptions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getAServiceSubscriptionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.AServiceSubscription>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getTransactions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getTransactionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Transaction>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "invoice",
+        "type": "set",
+        "value": "new UniBlocksGraph.Models.UniSql.Invoice()",
+        "valueType": "UniBlocksGraph.Models.UniSql.Invoice"
+      }
+    ]
+  },
+  "name": "Add Invoice",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}

@@ -1,0 +1,186 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "heading",
+          "name": "pageTitle",
+          "size": "H1",
+          "text": "Subscriptions"
+        },
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "Add",
+                  "type": "button",
+                  "events": {
+                    "click": [
+                      {
+                        "path": "add-subscription",
+                        "type": "popup",
+                        "then": [
+                          {
+                            "code": "grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "grid0",
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "data": "${getSubscriptionsResult}",
+                  "events": {
+                    "loadData": [],
+                    "rowSelect": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "SubscriptionId",
+                            "value": "${event.SubscriptionId}"
+                          }
+                        ],
+                        "path": "edit-subscription",
+                        "type": "popup",
+                        "then": [
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "title": "",
+                  "columns": [
+                    {
+                      "property": "SubscriptionId",
+                      "title": "Subscription Id"
+                    },
+                    {
+                      "property": "SubscriptionName",
+                      "title": "Subscription Name"
+                    },
+                    {
+                      "property": "BalanceId",
+                      "sortProperty": "Balance.BalanceId",
+                      "filterProperty": "Balance.BalanceId",
+                      "template": "${data.Balance?.BalanceId}",
+                      "title": "Balance"
+                    },
+                    {
+                      "property": "UserId",
+                      "sortProperty": "User.Email",
+                      "filterProperty": "User.Email",
+                      "template": "${data.User?.Email}",
+                      "title": "User"
+                    },
+                    {
+                      "property": "IsActive",
+                      "title": "Is Active"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "width": "70px",
+                      "textAlign": "center",
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "text": "",
+                          "size": "sm",
+                          "type": "button",
+                          "events": {
+                            "click": [
+                              {
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Subscription",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "UniSQL.deleteSubscription",
+                                "parameters": [
+                                  {
+                                    "name": "SubscriptionId",
+                                    "value": "${data.SubscriptionId}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "type": "grid",
+                  "itemType": "UniBlocksGraph.Models.UniSql.Subscription"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "UniSQL.getSubscriptions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getSubscriptionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Subscription>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "name": "Subscriptions",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}

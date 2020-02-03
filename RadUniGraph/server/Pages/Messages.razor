@@ -1,0 +1,43 @@
+﻿@page "/messages"
+@layout MainLayout
+@inherits UniBlocksGraph.Pages.MessagesComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using UniBlocksGraph.Models.UniSql
+@using Microsoft.AspNetCore.Identity
+@using UniBlocksGraph.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Messages">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getMessagesResult)" TItem="UniBlocksGraph.Models.UniSql.Message" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Message" Context="uniBlocksGraphModelsUniSqlMessage" Property="MessageId" Title="Message Id">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Message" Context="uniBlocksGraphModelsUniSqlMessage" Property="content" Title="Content">
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Message" Context="uniBlocksGraphModelsUniSqlMessage" Property="SenderUserId" SortProperty="User.Email" FilterProperty="User.Email" Title="User">
+              <Template Context="data">
+              @(data.User?.Email)
+              </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Message" Context="uniBlocksGraphModelsUniSqlMessage" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+              <Template Context="uniBlocksGraphModelsUniSqlMessage">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlMessage))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenGridColumn>
+          </Columns>
+        </RadzenGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

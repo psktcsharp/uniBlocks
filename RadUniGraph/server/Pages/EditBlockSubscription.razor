@@ -1,0 +1,66 @@
+﻿@page "/edit-block-subscription/{BlockId}/{SubscriptionId}"
+@layout MainLayout
+@inherits UniBlocksGraph.Pages.EditBlockSubscriptionComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using UniBlocksGraph.Models.UniSql
+@using Microsoft.AspNetCore.Identity
+@using UniBlocksGraph.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div style="" class="row">
+      <div class="col-md-9">
+        <RadzenLabel style="font-weight: bold" Text="Item no longer available." Visible="@(!canEdit)">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-3">
+        <RadzenButton ButtonStyle="ButtonStyle.Secondary" style="margin-bottom: 20px" Text="Close" Visible="@(!canEdit)" Click="@CloseButtonClick">
+        </RadzenButton>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm TItem="UniBlocksGraph.Models.UniSql.BlockSubscription" Data="@(blocksubscription)" Visible="@(blocksubscription != null && canEdit)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Block" Component="BlockId" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@(getBlocksResult)" TextProperty="BlockName" ValueProperty="BlockId" Placeholder="Choose Block" style="display: block; width: 100%" @bind-Value="@(blocksubscription.BlockId)" Name="BlockId">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="BlockId" Text="BlockId is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Subscription" Component="SubscriptionId" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@(getSubscriptionsResult)" TextProperty="SubscriptionName" ValueProperty="SubscriptionId" Placeholder="Choose Subscription" style="display: block; width: 100%" @bind-Value="@(blocksubscription.SubscriptionId)" Name="SubscriptionId">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="SubscriptionId" Text="SubscriptionId is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" ButtonStyle="ButtonStyle.Primary">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button3Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

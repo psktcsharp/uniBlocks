@@ -1,0 +1,25 @@
+﻿@inherits UniBlocksGraph.Layouts.LoginLayoutComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using UniBlocksGraph.Models.UniSql
+@using Microsoft.AspNetCore.Identity
+@using UniBlocksGraph.Models
+<RadzenDialog />
+<RadzenNotification />
+
+<RadzenBody @ref="body0" style="">
+  <ChildContent>
+    <div class="row justify-content-center">
+      <div class="justify-content-center col-xl-5 col-md-7">
+        <RadzenCard style="margin-top: 8rem">
+          <ChildContent>
+            <RadzenContentContainer Name="main">
+            @Body
+            </RadzenContentContainer>
+          </ChildContent>
+        </RadzenCard>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenBody>

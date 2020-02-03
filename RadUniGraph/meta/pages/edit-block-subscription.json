@@ -1,0 +1,312 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-9",
+              "components": [
+                {
+                  "name": "closeLabel",
+                  "style": {
+                    "fontWeight": "bold"
+                  },
+                  "text": "Item no longer available.",
+                  "type": "label",
+                  "visible": "${!canEdit}"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            },
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "buttonStyle": "secondary",
+                  "events": {
+                    "click": [
+                      {
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "icon": "",
+                  "name": "closeButton",
+                  "style": {
+                    "marginBottom": "20px"
+                  },
+                  "text": "Close",
+                  "type": "button",
+                  "visible": "${!canEdit}"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "style": {},
+          "type": "row"
+        },
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Block",
+                              "component": "BlockId",
+                              "name": "BlockIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getBlocksResult}",
+                              "textProperty": "BlockName",
+                              "valueProperty": "BlockId",
+                              "placeholder": "Choose Block",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "BlockId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${blocksubscription.BlockId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "BlockIdRequiredValidator",
+                              "component": "BlockId",
+                              "text": "BlockId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Subscription",
+                              "component": "SubscriptionId",
+                              "name": "SubscriptionIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getSubscriptionsResult}",
+                              "textProperty": "SubscriptionName",
+                              "valueProperty": "SubscriptionId",
+                              "placeholder": "Choose Subscription",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "SubscriptionId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${blocksubscription.SubscriptionId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "SubscriptionIdRequiredValidator",
+                              "component": "SubscriptionId",
+                              "text": "SubscriptionId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to update BlockSubscription",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "UniSQL.updateBlockSubscription",
+                        "parameters": [
+                          {
+                            "name": "BlockId",
+                            "value": "${parameters.BlockId}"
+                          },
+                          {
+                            "name": "SubscriptionId",
+                            "value": "${parameters.SubscriptionId}"
+                          },
+                          {
+                            "name": "BlockSubscription",
+                            "value": "${blocksubscription}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${blocksubscription}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "UniBlocksGraph.Models.UniSql.BlockSubscription",
+                  "data": "${blocksubscription}",
+                  "visible": "${blocksubscription != null && canEdit}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "canEdit",
+        "type": "set",
+        "value": "true",
+        "valueType": "bool"
+      },
+      {
+        "name": "UniSQL.getBlockSubscriptionByBlockIdAndSubscriptionId",
+        "parameters": [
+          {
+            "name": "BlockId",
+            "value": "${parameters.BlockId}"
+          },
+          {
+            "name": "SubscriptionId",
+            "value": "${parameters.SubscriptionId}"
+          }
+        ],
+        "then": [
+          {
+            "name": "blocksubscription",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "UniBlocksGraph.Models.UniSql.BlockSubscription"
+          }
+        ],
+        "error": [],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getBlocks",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getBlocksResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Block>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getSubscriptions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getSubscriptionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Subscription>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "name": "Edit Block Subscription",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}

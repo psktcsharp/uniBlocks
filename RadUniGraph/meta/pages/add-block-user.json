@@ -1,0 +1,233 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Block",
+                              "component": "BlockId",
+                              "name": "BlockIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getBlocksResult}",
+                              "textProperty": "BlockName",
+                              "valueProperty": "BlockId",
+                              "placeholder": "Choose Block",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "BlockId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${blockuser.BlockId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "BlockIdRequiredValidator",
+                              "component": "BlockId",
+                              "text": "BlockId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "User",
+                              "component": "UserId",
+                              "name": "UserIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getUsersResult}",
+                              "textProperty": "Email",
+                              "valueProperty": "UserId",
+                              "placeholder": "Choose User",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "UserId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${blockuser.UserId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "UserIdRequiredValidator",
+                              "component": "UserId",
+                              "text": "UserId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new BlockUser!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "UniSQL.createBlockUser",
+                        "parameters": [
+                          {
+                            "name": "BlockUser",
+                            "value": "${blockuser}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${blockuser}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "data": "${blockuser}",
+                  "visible": "${blockuser != null}",
+                  "itemType": "UniBlocksGraph.Models.UniSql.BlockUser"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "UniSQL.getBlocks",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getBlocksResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Block>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getUsers",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getUsersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.User>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "blockuser",
+        "type": "set",
+        "value": "new UniBlocksGraph.Models.UniSql.BlockUser()",
+        "valueType": "UniBlocksGraph.Models.UniSql.BlockUser"
+      }
+    ]
+  },
+  "name": "Add Block User",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}
