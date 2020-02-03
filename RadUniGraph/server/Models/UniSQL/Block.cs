@@ -8,7 +8,14 @@ namespace UniBlocksGraph.Models.UniSql
   [Table("Blocks", Schema = "dbo")]
   public partial class Block
   {
-    [Key]
+        [NotMapped]
+        public int SubsCount {
+            get {
+                return BlockSubscriptions.Count;
+            }
+            set { } 
+        }
+        [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int BlockId
     {

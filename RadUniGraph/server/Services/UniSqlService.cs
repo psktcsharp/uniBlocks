@@ -171,7 +171,7 @@ namespace UniBlocksGraph
 
         public async Task<IQueryable<Models.UniSql.Block>> GetBlocks(Query query = null)
         {
-            var items = context.Blocks.AsQueryable();
+            var items = context.Blocks.AsQueryable().Include("BlockSubscriptions");
 
             if (query != null)
             {

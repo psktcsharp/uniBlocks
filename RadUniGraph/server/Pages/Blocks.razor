@@ -35,12 +35,9 @@
                         </RadzenButton>
                     </Template>
                 </RadzenGridColumn>
-                <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" >
-                    <Template Context="uniBlocksGraphModelsUniSqlBlock">
-                       <Radzen.Blazor.RadzenLabel Text="hey"></Radzen.Blazor.RadzenLabel>
-                    </Template>
+                <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="SubsCount" Title="Subs Count">
                 </RadzenGridColumn>
-                <label>Hey</label>
+
             </Columns>
         </RadzenGrid>
       </div>
