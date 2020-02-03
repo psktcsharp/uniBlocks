@@ -1,0 +1,189 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Transaction Type",
+                              "component": "TransactionType",
+                              "name": "TransactionTypeLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "valueType": "string",
+                              "type": "textbox",
+                              "name": "TransactionType",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "value": "${transaction.TransactionType}"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Amount",
+                              "component": "Amount",
+                              "name": "AmountLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "valueType": "decimal",
+                              "type": "numeric",
+                              "name": "Amount",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${transaction.Amount}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "AmountRequiredValidator",
+                              "component": "Amount",
+                              "text": "Amount is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new Transaction!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "UniSQL.createTransaction",
+                        "parameters": [
+                          {
+                            "name": "Transaction",
+                            "value": "${transaction}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${transaction}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "data": "${transaction}",
+                  "visible": "${transaction != null}",
+                  "itemType": "UniBlocksGraph.Models.UniSql.Transaction"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "transaction",
+        "type": "set",
+        "value": "new UniBlocksGraph.Models.UniSql.Transaction()",
+        "valueType": "UniBlocksGraph.Models.UniSql.Transaction"
+      }
+    ]
+  },
+  "name": "Add Transaction",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}

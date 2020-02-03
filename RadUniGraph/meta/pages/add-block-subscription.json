@@ -1,0 +1,233 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Block",
+                              "component": "BlockId",
+                              "name": "BlockIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getBlocksResult}",
+                              "textProperty": "BlockName",
+                              "valueProperty": "BlockId",
+                              "placeholder": "Choose Block",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "BlockId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${blocksubscription.BlockId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "BlockIdRequiredValidator",
+                              "component": "BlockId",
+                              "text": "BlockId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Subscription",
+                              "component": "SubscriptionId",
+                              "name": "SubscriptionIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getSubscriptionsResult}",
+                              "textProperty": "SubscriptionName",
+                              "valueProperty": "SubscriptionId",
+                              "placeholder": "Choose Subscription",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "SubscriptionId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${blocksubscription.SubscriptionId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "SubscriptionIdRequiredValidator",
+                              "component": "SubscriptionId",
+                              "text": "SubscriptionId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new BlockSubscription!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "UniSQL.createBlockSubscription",
+                        "parameters": [
+                          {
+                            "name": "BlockSubscription",
+                            "value": "${blocksubscription}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${blocksubscription}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "data": "${blocksubscription}",
+                  "visible": "${blocksubscription != null}",
+                  "itemType": "UniBlocksGraph.Models.UniSql.BlockSubscription"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "UniSQL.getBlocks",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getBlocksResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Block>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getSubscriptions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getSubscriptionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Subscription>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "blocksubscription",
+        "type": "set",
+        "value": "new UniBlocksGraph.Models.UniSql.BlockSubscription()",
+        "valueType": "UniBlocksGraph.Models.UniSql.BlockSubscription"
+      }
+    ]
+  },
+  "name": "Add Block Subscription",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}

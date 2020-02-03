@@ -1,0 +1,2705 @@
+{
+  "info": {
+    "title": "UniSQL",
+    "x-type": "odata",
+    "x-connector": "mssql",
+    "x-connector-version": 15
+  },
+  "definitions": {
+    "AServiceSubscription": {
+      "x-table": "dbo.AServiceSubscriptions",
+      "resource": "AServiceSubscriptions",
+      "required": [
+        "ServiceId",
+        "SubscriptionId"
+      ],
+      "properties": {
+        "Service": {
+          "type": "object",
+          "$ref": "#/definitions/Service"
+        },
+        "ServiceId": {
+          "x-nullable": false,
+          "type": "integer",
+          "x-key": true,
+          "x-foreignKey": {
+            "parentTable": "Services",
+            "parentEntityType": "Service",
+            "type": "Service",
+            "principalKey": "AServiceId",
+            "name": "Service",
+            "textProperty": "ServiceName",
+            "navigationProperty": "AServiceSubscriptions"
+          },
+          "x-navigation": [
+            {
+              "inversePropertyName": "AServiceSubscription",
+              "name": "Invoices",
+              "type": "Invoice"
+            }
+          ]
+        },
+        "Subscription": {
+          "type": "object",
+          "$ref": "#/definitions/Subscription"
+        },
+        "SubscriptionId": {
+          "x-nullable": false,
+          "type": "integer",
+          "x-key": true,
+          "x-foreignKey": {
+            "parentTable": "Subscriptions",
+            "parentEntityType": "Subscription",
+            "type": "Subscription",
+            "principalKey": "SubscriptionId",
+            "name": "Subscription",
+            "textProperty": "SubscriptionName",
+            "navigationProperty": "AServiceSubscriptions"
+          }
+        },
+        "Invoices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Invoice"
+          }
+        }
+      }
+    },
+    "Balance": {
+      "x-table": "dbo.Balances",
+      "resource": "Balances",
+      "required": [
+        "value"
+      ],
+      "properties": {
+        "BalanceId": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Balance",
+              "name": "Subscriptions",
+              "type": "Subscription"
+            }
+          ]
+        },
+        "value": {
+          "x-nullable": false,
+          "type": "number",
+          "format": "decimal"
+        },
+        "Subscriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Subscription"
+          }
+        }
+      }
+    },
+    "Block": {
+      "x-table": "dbo.Blocks",
+      "resource": "Blocks",
+      "required": [
+        "isActive"
+      ],
+      "properties": {
+        "BlockId": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Block",
+              "name": "BlockUsers",
+              "type": "BlockUser"
+            },
+            {
+              "inversePropertyName": "Block",
+              "name": "BlockSubscriptions",
+              "type": "BlockSubscription"
+            }
+          ]
+        },
+        "BlockName": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "isActive": {
+          "x-nullable": false,
+          "type": "boolean"
+        },
+        "BlockUsers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BlockUser"
+          }
+        },
+        "BlockSubscriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BlockSubscription"
+          }
+        }
+      }
+    },
+    "BlockSubscription": {
+      "x-table": "dbo.BlockSubscriptions",
+      "resource": "BlockSubscriptions",
+      "required": [
+        "BlockId",
+        "SubscriptionId"
+      ],
+      "properties": {
+        "Block": {
+          "type": "object",
+          "$ref": "#/definitions/Block"
+        },
+        "BlockId": {
+          "x-nullable": false,
+          "type": "integer",
+          "x-key": true,
+          "x-foreignKey": {
+            "parentTable": "Blocks",
+            "parentEntityType": "Block",
+            "type": "Block",
+            "principalKey": "BlockId",
+            "name": "Block",
+            "textProperty": "BlockName",
+            "navigationProperty": "BlockSubscriptions"
+          }
+        },
+        "Subscription": {
+          "type": "object",
+          "$ref": "#/definitions/Subscription"
+        },
+        "SubscriptionId": {
+          "x-nullable": false,
+          "type": "integer",
+          "x-key": true,
+          "x-foreignKey": {
+            "parentTable": "Subscriptions",
+            "parentEntityType": "Subscription",
+            "type": "Subscription",
+            "principalKey": "SubscriptionId",
+            "name": "Subscription",
+            "textProperty": "SubscriptionName",
+            "navigationProperty": "BlockSubscriptions"
+          }
+        }
+      }
+    },
+    "BlockUser": {
+      "x-table": "dbo.BlockUser",
+      "resource": "BlockUsers",
+      "required": [
+        "BlockId",
+        "UserId"
+      ],
+      "properties": {
+        "Block": {
+          "type": "object",
+          "$ref": "#/definitions/Block"
+        },
+        "BlockId": {
+          "x-nullable": false,
+          "type": "integer",
+          "x-key": true,
+          "x-foreignKey": {
+            "parentTable": "Blocks",
+            "parentEntityType": "Block",
+            "type": "Block",
+            "principalKey": "BlockId",
+            "name": "Block",
+            "textProperty": "BlockName",
+            "navigationProperty": "BlockUsers"
+          }
+        },
+        "User": {
+          "type": "object",
+          "$ref": "#/definitions/User"
+        },
+        "UserId": {
+          "x-nullable": false,
+          "type": "integer",
+          "x-key": true,
+          "x-foreignKey": {
+            "parentTable": "Users",
+            "parentEntityType": "User",
+            "type": "User",
+            "principalKey": "UserId",
+            "name": "User",
+            "textProperty": "Email",
+            "navigationProperty": "BlockUsers"
+          }
+        }
+      }
+    },
+    "Invoice": {
+      "x-table": "dbo.Invoice",
+      "resource": "Invoices",
+      "required": [],
+      "properties": {
+        "InvoiceId": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer"
+        },
+        "AServiceSubscription": {
+          "type": "object",
+          "$ref": "#/definitions/AServiceSubscription"
+        },
+        "AServiceSubscriptionServiceId": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "AServiceSubscriptions",
+            "parentEntityType": "AServiceSubscription",
+            "type": "AServiceSubscription",
+            "principalKey": "ServiceId",
+            "name": "AServiceSubscription",
+            "textProperty": "ServiceId",
+            "navigationProperty": "Invoices",
+            "foreignKeys": [
+              "AServiceSubscriptionServiceId",
+              "AServiceSubscriptionSubscriptionId"
+            ],
+            "principalKeys": [
+              "ServiceId",
+              "SubscriptionId"
+            ]
+          }
+        },
+        "AServiceSubscriptionSubscriptionId": {
+          "type": "integer"
+        },
+        "Transaction": {
+          "type": "object",
+          "$ref": "#/definitions/Transaction"
+        },
+        "TransactionATransactionId": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Transactions",
+            "parentEntityType": "Transaction",
+            "type": "Transaction",
+            "principalKey": "ATransactionId",
+            "name": "Transaction",
+            "textProperty": "TransactionType",
+            "navigationProperty": "Invoices"
+          }
+        }
+      }
+    },
+    "Message": {
+      "x-table": "dbo.Messages",
+      "resource": "Messages",
+      "required": [],
+      "properties": {
+        "MessageId": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Message",
+              "name": "UserMessages",
+              "type": "UserMessage"
+            }
+          ]
+        },
+        "content": {
+          "type": "string"
+        },
+        "User": {
+          "type": "object",
+          "$ref": "#/definitions/User"
+        },
+        "SenderUserId": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Users",
+            "parentEntityType": "User",
+            "type": "User",
+            "principalKey": "UserId",
+            "name": "User",
+            "textProperty": "Email",
+            "navigationProperty": "Messages"
+          }
+        },
+        "UserMessages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserMessage"
+          }
+        }
+      }
+    },
+    "Service": {
+      "x-table": "dbo.Services",
+      "resource": "Services",
+      "required": [
+        "IsActive"
+      ],
+      "properties": {
+        "AServiceId": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Service",
+              "name": "AServiceSubscriptions",
+              "type": "AServiceSubscription"
+            }
+          ]
+        },
+        "ServiceName": {
+          "type": "string"
+        },
+        "IsActive": {
+          "x-nullable": false,
+          "type": "boolean"
+        },
+        "AServiceSubscriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AServiceSubscription"
+          }
+        }
+      }
+    },
+    "Subscription": {
+      "x-table": "dbo.Subscriptions",
+      "resource": "Subscriptions",
+      "required": [
+        "UserId",
+        "IsActive"
+      ],
+      "properties": {
+        "SubscriptionId": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Subscription",
+              "name": "AServiceSubscriptions",
+              "type": "AServiceSubscription"
+            },
+            {
+              "inversePropertyName": "Subscription",
+              "name": "BlockSubscriptions",
+              "type": "BlockSubscription"
+            }
+          ]
+        },
+        "SubscriptionName": {
+          "type": "string"
+        },
+        "Balance": {
+          "type": "object",
+          "$ref": "#/definitions/Balance"
+        },
+        "BalanceId": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Balances",
+            "parentEntityType": "Balance",
+            "type": "Balance",
+            "principalKey": "BalanceId",
+            "name": "Balance",
+            "textProperty": "BalanceId",
+            "navigationProperty": "Subscriptions"
+          }
+        },
+        "User": {
+          "type": "object",
+          "$ref": "#/definitions/User"
+        },
+        "UserId": {
+          "x-nullable": false,
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Users",
+            "parentEntityType": "User",
+            "type": "User",
+            "principalKey": "UserId",
+            "name": "User",
+            "textProperty": "Email",
+            "navigationProperty": "Subscriptions"
+          }
+        },
+        "IsActive": {
+          "x-nullable": false,
+          "type": "boolean"
+        },
+        "AServiceSubscriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AServiceSubscription"
+          }
+        },
+        "BlockSubscriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BlockSubscription"
+          }
+        }
+      }
+    },
+    "Transaction": {
+      "x-table": "dbo.Transactions",
+      "resource": "Transactions",
+      "required": [
+        "Amount"
+      ],
+      "properties": {
+        "ATransactionId": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Transaction",
+              "name": "Invoices",
+              "type": "Invoice"
+            }
+          ]
+        },
+        "TransactionType": {
+          "type": "string"
+        },
+        "Amount": {
+          "x-nullable": false,
+          "type": "number",
+          "format": "decimal"
+        },
+        "Invoices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Invoice"
+          }
+        }
+      }
+    },
+    "User": {
+      "x-table": "dbo.Users",
+      "resource": "Users",
+      "required": [
+        "Email",
+        "isUser",
+        "isAdmin"
+      ],
+      "properties": {
+        "UserId": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "User",
+              "name": "BlockUsers",
+              "type": "BlockUser"
+            },
+            {
+              "inversePropertyName": "User",
+              "name": "Messages",
+              "type": "Message"
+            },
+            {
+              "inversePropertyName": "User",
+              "name": "Subscriptions",
+              "type": "Subscription"
+            },
+            {
+              "inversePropertyName": "User",
+              "name": "UserMessages",
+              "type": "UserMessage"
+            }
+          ]
+        },
+        "Email": {
+          "x-nullable": false,
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "isUser": {
+          "x-nullable": false,
+          "type": "boolean"
+        },
+        "isAdmin": {
+          "x-nullable": false,
+          "type": "boolean"
+        },
+        "PhoneNumber": {
+          "type": "string"
+        },
+        "BlockUsers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BlockUser"
+          }
+        },
+        "Messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Message"
+          }
+        },
+        "Subscriptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Subscription"
+          }
+        },
+        "UserMessages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserMessage"
+          }
+        }
+      }
+    },
+    "UserMessage": {
+      "x-table": "dbo.UserMessages",
+      "resource": "UserMessages",
+      "required": [
+        "UserId",
+        "MessageId"
+      ],
+      "properties": {
+        "User": {
+          "type": "object",
+          "$ref": "#/definitions/User"
+        },
+        "UserId": {
+          "x-nullable": false,
+          "type": "integer",
+          "x-key": true,
+          "x-foreignKey": {
+            "parentTable": "Users",
+            "parentEntityType": "User",
+            "type": "User",
+            "principalKey": "UserId",
+            "name": "User",
+            "textProperty": "Email",
+            "navigationProperty": "UserMessages"
+          }
+        },
+        "Message": {
+          "type": "object",
+          "$ref": "#/definitions/Message"
+        },
+        "MessageId": {
+          "x-nullable": false,
+          "type": "integer",
+          "x-key": true,
+          "x-foreignKey": {
+            "parentTable": "Messages",
+            "parentEntityType": "Message",
+            "type": "Message",
+            "principalKey": "MessageId",
+            "name": "Message",
+            "textProperty": "content",
+            "navigationProperty": "UserMessages"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/AServiceSubscriptions": {
+      "get": {
+        "operationId": "getAServiceSubscriptions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/AServiceSubscription"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createAServiceSubscription",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "AServiceSubscription",
+            "schema": {
+              "$ref": "#/definitions/AServiceSubscription"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/AServiceSubscription"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Balances": {
+      "get": {
+        "operationId": "getBalances",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Balance"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createBalance",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Balance",
+            "schema": {
+              "$ref": "#/definitions/Balance"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Balance"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Blocks": {
+      "get": {
+        "operationId": "getBlocks",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Block"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createBlock",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Block",
+            "schema": {
+              "$ref": "#/definitions/Block"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Block"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/BlockSubscriptions": {
+      "get": {
+        "operationId": "getBlockSubscriptions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/BlockSubscription"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createBlockSubscription",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "BlockSubscription",
+            "schema": {
+              "$ref": "#/definitions/BlockSubscription"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/BlockSubscription"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/BlockUsers": {
+      "get": {
+        "operationId": "getBlockUsers",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/BlockUser"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createBlockUser",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "BlockUser",
+            "schema": {
+              "$ref": "#/definitions/BlockUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/BlockUser"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices": {
+      "get": {
+        "operationId": "getInvoices",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Invoice"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createInvoice",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Invoice",
+            "schema": {
+              "$ref": "#/definitions/Invoice"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Invoice"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Messages": {
+      "get": {
+        "operationId": "getMessages",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Message"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createMessage",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Message",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Services": {
+      "get": {
+        "operationId": "getServices",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Service"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createService",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Service",
+            "schema": {
+              "$ref": "#/definitions/Service"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Service"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Subscriptions": {
+      "get": {
+        "operationId": "getSubscriptions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Subscription"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createSubscription",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Subscription",
+            "schema": {
+              "$ref": "#/definitions/Subscription"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Subscription"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Transactions": {
+      "get": {
+        "operationId": "getTransactions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Transaction"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createTransaction",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Transaction",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Users": {
+      "get": {
+        "operationId": "getUsers",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/User"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "User",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/UserMessages": {
+      "get": {
+        "operationId": "getUserMessages",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/UserMessage"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createUserMessage",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "UserMessage",
+            "schema": {
+              "$ref": "#/definitions/UserMessage"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/UserMessage"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/AServiceSubscriptions(ServiceId={ServiceId},SubscriptionId={SubscriptionId})": {
+      "delete": {
+        "operationId": "deleteAServiceSubscription",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ServiceId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "SubscriptionId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getAServiceSubscriptionByServiceIdAndSubscriptionId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ServiceId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "SubscriptionId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/AServiceSubscription"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateAServiceSubscription",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ServiceId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "SubscriptionId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "AServiceSubscription",
+            "schema": {
+              "$ref": "#/definitions/AServiceSubscription"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelAServiceSubscriptionChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "AServiceSubscription",
+            "schema": {
+              "$ref": "#/definitions/AServiceSubscription"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Balances({BalanceId})": {
+      "delete": {
+        "operationId": "deleteBalance",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BalanceId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getBalanceByBalanceId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BalanceId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Balance"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateBalance",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BalanceId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Balance",
+            "schema": {
+              "$ref": "#/definitions/Balance"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelBalanceChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Balance",
+            "schema": {
+              "$ref": "#/definitions/Balance"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Blocks({BlockId})": {
+      "delete": {
+        "operationId": "deleteBlock",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BlockId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getBlockByBlockId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BlockId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Block"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateBlock",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BlockId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Block",
+            "schema": {
+              "$ref": "#/definitions/Block"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelBlockChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Block",
+            "schema": {
+              "$ref": "#/definitions/Block"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/BlockSubscriptions(BlockId={BlockId},SubscriptionId={SubscriptionId})": {
+      "delete": {
+        "operationId": "deleteBlockSubscription",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BlockId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "SubscriptionId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getBlockSubscriptionByBlockIdAndSubscriptionId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BlockId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "SubscriptionId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/BlockSubscription"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateBlockSubscription",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BlockId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "SubscriptionId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "BlockSubscription",
+            "schema": {
+              "$ref": "#/definitions/BlockSubscription"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelBlockSubscriptionChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "BlockSubscription",
+            "schema": {
+              "$ref": "#/definitions/BlockSubscription"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/BlockUsers(BlockId={BlockId},UserId={UserId})": {
+      "delete": {
+        "operationId": "deleteBlockUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BlockId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "UserId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getBlockUserByBlockIdAndUserId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BlockId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "UserId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/BlockUser"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateBlockUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BlockId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "UserId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "BlockUser",
+            "schema": {
+              "$ref": "#/definitions/BlockUser"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelBlockUserChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "BlockUser",
+            "schema": {
+              "$ref": "#/definitions/BlockUser"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Invoices({InvoiceId})": {
+      "delete": {
+        "operationId": "deleteInvoice",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "InvoiceId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getInvoiceByInvoiceId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "InvoiceId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Invoice"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateInvoice",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "InvoiceId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Invoice",
+            "schema": {
+              "$ref": "#/definitions/Invoice"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelInvoiceChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Invoice",
+            "schema": {
+              "$ref": "#/definitions/Invoice"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Messages({MessageId})": {
+      "delete": {
+        "operationId": "deleteMessage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "MessageId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getMessageByMessageId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "MessageId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateMessage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "MessageId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Message",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelMessageChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Message",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Services({AServiceId})": {
+      "delete": {
+        "operationId": "deleteService",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "AServiceId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getServiceByAServiceId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "AServiceId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Service"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateService",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "AServiceId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Service",
+            "schema": {
+              "$ref": "#/definitions/Service"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelServiceChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Service",
+            "schema": {
+              "$ref": "#/definitions/Service"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Subscriptions({SubscriptionId})": {
+      "delete": {
+        "operationId": "deleteSubscription",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "SubscriptionId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getSubscriptionBySubscriptionId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "SubscriptionId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Subscription"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateSubscription",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "SubscriptionId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Subscription",
+            "schema": {
+              "$ref": "#/definitions/Subscription"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelSubscriptionChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Subscription",
+            "schema": {
+              "$ref": "#/definitions/Subscription"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Transactions({ATransactionId})": {
+      "delete": {
+        "operationId": "deleteTransaction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ATransactionId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getTransactionByATransactionId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ATransactionId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateTransaction",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ATransactionId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Transaction",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelTransactionChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Transaction",
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Users({UserId})": {
+      "delete": {
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UserId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getUserByUserId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UserId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UserId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "User",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelUserChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "User",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/UserMessages(UserId={UserId},MessageId={MessageId})": {
+      "delete": {
+        "operationId": "deleteUserMessage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UserId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "MessageId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getUserMessageByUserIdAndMessageId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UserId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "MessageId",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/UserMessage"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateUserMessage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "UserId",
+            "type": "integer"
+          },
+          {
+            "in": "path",
+            "name": "MessageId",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "UserMessage",
+            "schema": {
+              "$ref": "#/definitions/UserMessage"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelUserMessageChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "UserMessage",
+            "schema": {
+              "$ref": "#/definitions/UserMessage"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "basePath": "/odata/UniSQL",
+  "host": "localhost:5000",
+  "schemes": [
+    "http"
+  ]
+}

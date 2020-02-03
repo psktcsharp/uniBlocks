@@ -1,0 +1,233 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "User",
+                              "component": "UserId",
+                              "name": "UserIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getUsersResult}",
+                              "textProperty": "Email",
+                              "valueProperty": "UserId",
+                              "placeholder": "Choose User",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "UserId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${usermessage.UserId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "UserIdRequiredValidator",
+                              "component": "UserId",
+                              "text": "UserId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Message",
+                              "component": "MessageId",
+                              "name": "MessageIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getMessagesResult}",
+                              "textProperty": "content",
+                              "valueProperty": "MessageId",
+                              "placeholder": "Choose Message",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "MessageId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${usermessage.MessageId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "MessageIdRequiredValidator",
+                              "component": "MessageId",
+                              "text": "MessageId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new UserMessage!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "UniSQL.createUserMessage",
+                        "parameters": [
+                          {
+                            "name": "UserMessage",
+                            "value": "${usermessage}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${usermessage}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "data": "${usermessage}",
+                  "visible": "${usermessage != null}",
+                  "itemType": "UniBlocksGraph.Models.UniSql.UserMessage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "UniSQL.getUsers",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getUsersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.User>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getMessages",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getMessagesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Message>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "usermessage",
+        "type": "set",
+        "value": "new UniBlocksGraph.Models.UniSql.UserMessage()",
+        "valueType": "UniBlocksGraph.Models.UniSql.UserMessage"
+      }
+    ]
+  },
+  "name": "Add User Message",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}

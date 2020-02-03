@@ -1,0 +1,182 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "heading",
+          "name": "pageTitle",
+          "size": "H1",
+          "text": "Block Users"
+        },
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "Add",
+                  "type": "button",
+                  "events": {
+                    "click": [
+                      {
+                        "path": "add-block-user",
+                        "type": "popup",
+                        "then": [
+                          {
+                            "code": "grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "grid0",
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "data": "${getBlockUsersResult}",
+                  "events": {
+                    "loadData": [],
+                    "rowSelect": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "BlockId",
+                            "value": "${event.BlockId}"
+                          },
+                          {
+                            "name": "UserId",
+                            "value": "${event.UserId}"
+                          }
+                        ],
+                        "path": "edit-block-user",
+                        "type": "popup",
+                        "then": [
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "title": "",
+                  "columns": [
+                    {
+                      "property": "BlockId",
+                      "sortProperty": "Block.BlockName",
+                      "filterProperty": "Block.BlockName",
+                      "template": "${data.Block?.BlockName}",
+                      "title": "Block"
+                    },
+                    {
+                      "property": "UserId",
+                      "sortProperty": "User.Email",
+                      "filterProperty": "User.Email",
+                      "template": "${data.User?.Email}",
+                      "title": "User"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "width": "70px",
+                      "textAlign": "center",
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "text": "",
+                          "size": "sm",
+                          "type": "button",
+                          "events": {
+                            "click": [
+                              {
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete BlockUser",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "UniSQL.deleteBlockUser",
+                                "parameters": [
+                                  {
+                                    "name": "BlockId",
+                                    "value": "${data.BlockId}"
+                                  },
+                                  {
+                                    "name": "UserId",
+                                    "value": "${data.UserId}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "type": "grid",
+                  "itemType": "UniBlocksGraph.Models.UniSql.BlockUser"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "UniSQL.getBlockUsers",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getBlockUsersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.BlockUser>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "name": "Block Users",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}

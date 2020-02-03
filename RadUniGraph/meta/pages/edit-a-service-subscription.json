@@ -1,0 +1,312 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-9",
+              "components": [
+                {
+                  "name": "closeLabel",
+                  "style": {
+                    "fontWeight": "bold"
+                  },
+                  "text": "Item no longer available.",
+                  "type": "label",
+                  "visible": "${!canEdit}"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            },
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "buttonStyle": "secondary",
+                  "events": {
+                    "click": [
+                      {
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "icon": "",
+                  "name": "closeButton",
+                  "style": {
+                    "marginBottom": "20px"
+                  },
+                  "text": "Close",
+                  "type": "button",
+                  "visible": "${!canEdit}"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "style": {},
+          "type": "row"
+        },
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Service",
+                              "component": "ServiceId",
+                              "name": "ServiceIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getServicesResult}",
+                              "textProperty": "ServiceName",
+                              "valueProperty": "AServiceId",
+                              "placeholder": "Choose Service",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "ServiceId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${aservicesubscription.ServiceId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "ServiceIdRequiredValidator",
+                              "component": "ServiceId",
+                              "text": "ServiceId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Subscription",
+                              "component": "SubscriptionId",
+                              "name": "SubscriptionIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getSubscriptionsResult}",
+                              "textProperty": "SubscriptionName",
+                              "valueProperty": "SubscriptionId",
+                              "placeholder": "Choose Subscription",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "SubscriptionId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${aservicesubscription.SubscriptionId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "SubscriptionIdRequiredValidator",
+                              "component": "SubscriptionId",
+                              "text": "SubscriptionId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to update AServiceSubscription",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "UniSQL.updateAServiceSubscription",
+                        "parameters": [
+                          {
+                            "name": "ServiceId",
+                            "value": "${parameters.ServiceId}"
+                          },
+                          {
+                            "name": "SubscriptionId",
+                            "value": "${parameters.SubscriptionId}"
+                          },
+                          {
+                            "name": "AServiceSubscription",
+                            "value": "${aservicesubscription}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${aservicesubscription}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "UniBlocksGraph.Models.UniSql.AServiceSubscription",
+                  "data": "${aservicesubscription}",
+                  "visible": "${aservicesubscription != null && canEdit}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "canEdit",
+        "type": "set",
+        "value": "true",
+        "valueType": "bool"
+      },
+      {
+        "name": "UniSQL.getAServiceSubscriptionByServiceIdAndSubscriptionId",
+        "parameters": [
+          {
+            "name": "ServiceId",
+            "value": "${parameters.ServiceId}"
+          },
+          {
+            "name": "SubscriptionId",
+            "value": "${parameters.SubscriptionId}"
+          }
+        ],
+        "then": [
+          {
+            "name": "aservicesubscription",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "UniBlocksGraph.Models.UniSql.AServiceSubscription"
+          }
+        ],
+        "error": [],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getServices",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getServicesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Service>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getSubscriptions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getSubscriptionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Subscription>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "name": "Edit A Service Subscription",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}

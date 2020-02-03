@@ -1,0 +1,308 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Subscription Name",
+                              "component": "SubscriptionName",
+                              "name": "SubscriptionNameLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "valueType": "string",
+                              "type": "textbox",
+                              "name": "SubscriptionName",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "value": "${subscription.SubscriptionName}"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Balance",
+                              "component": "BalanceId",
+                              "name": "BalanceIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getBalancesResult}",
+                              "textProperty": "BalanceId",
+                              "valueProperty": "BalanceId",
+                              "placeholder": "Choose Balance",
+                              "valueType": "int?",
+                              "type": "dropdown",
+                              "name": "BalanceId",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "value": "${subscription.BalanceId}"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "User",
+                              "component": "UserId",
+                              "name": "UserIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getUsersResult}",
+                              "textProperty": "Email",
+                              "valueProperty": "UserId",
+                              "placeholder": "Choose User",
+                              "valueType": "int",
+                              "type": "dropdown",
+                              "name": "UserId",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${subscription.UserId}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "UserIdRequiredValidator",
+                              "component": "UserId",
+                              "text": "UserId is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Is Active",
+                              "component": "IsActive",
+                              "name": "IsActiveLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "valueType": "bool",
+                              "type": "checkbox",
+                              "name": "IsActive",
+                              "style": {
+                                "display": "block"
+                              },
+                              "value": "${subscription.IsActive}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "IsActiveRequiredValidator",
+                              "component": "IsActive",
+                              "text": "IsActive is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new Subscription!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "UniSQL.createSubscription",
+                        "parameters": [
+                          {
+                            "name": "Subscription",
+                            "value": "${subscription}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${subscription}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "data": "${subscription}",
+                  "visible": "${subscription != null}",
+                  "itemType": "UniBlocksGraph.Models.UniSql.Subscription"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "UniSQL.getBalances",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getBalancesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Balance>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getUsers",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getUsersResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.User>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "subscription",
+        "type": "set",
+        "value": "new UniBlocksGraph.Models.UniSql.Subscription()",
+        "valueType": "UniBlocksGraph.Models.UniSql.Subscription"
+      }
+    ]
+  },
+  "name": "Add Subscription",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "heading",
+          "name": "pageTitle",
+          "size": "H1",
+          "text": "Invoices"
+        },
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "Add",
+                  "type": "button",
+                  "events": {
+                    "click": [
+                      {
+                        "path": "add-invoice",
+                        "type": "popup",
+                        "then": [
+                          {
+                            "code": "grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "grid0",
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "data": "${getInvoicesResult}",
+                  "events": {
+                    "loadData": [],
+                    "rowSelect": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "InvoiceId",
+                            "value": "${event.InvoiceId}"
+                          }
+                        ],
+                        "path": "edit-invoice",
+                        "type": "popup",
+                        "then": [
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "title": "",
+                  "columns": [
+                    {
+                      "property": "InvoiceId",
+                      "title": "Invoice Id"
+                    },
+                    {
+                      "property": "AServiceSubscriptionServiceId",
+                      "sortProperty": "AServiceSubscription.ServiceId",
+                      "filterProperty": "AServiceSubscription.ServiceId",
+                      "template": "${data.AServiceSubscription?.ServiceId}",
+                      "title": "A Service Subscription"
+                    },
+                    {
+                      "property": "AServiceSubscriptionSubscriptionId",
+                      "title": "A Service Subscription Subscription Id"
+                    },
+                    {
+                      "property": "TransactionATransactionId",
+                      "sortProperty": "Transaction.TransactionType",
+                      "filterProperty": "Transaction.TransactionType",
+                      "template": "${data.Transaction?.TransactionType}",
+                      "title": "Transaction"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "width": "70px",
+                      "textAlign": "center",
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "text": "",
+                          "size": "sm",
+                          "type": "button",
+                          "events": {
+                            "click": [
+                              {
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Invoice",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "UniSQL.deleteInvoice",
+                                "parameters": [
+                                  {
+                                    "name": "InvoiceId",
+                                    "value": "${data.InvoiceId}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "type": "grid",
+                  "itemType": "UniBlocksGraph.Models.UniSql.Invoice"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "UniSQL.getInvoices",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getInvoicesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Invoice>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "name": "Invoices",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}

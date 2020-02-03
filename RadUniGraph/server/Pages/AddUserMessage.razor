@@ -1,0 +1,56 @@
+﻿@page "/add-user-message"
+@layout MainLayout
+@inherits UniBlocksGraph.Pages.AddUserMessageComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using UniBlocksGraph.Models.UniSql
+@using Microsoft.AspNetCore.Identity
+@using UniBlocksGraph.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@(usermessage)" Visible="@(usermessage != null)" TItem="UniBlocksGraph.Models.UniSql.UserMessage" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="User" Component="UserId" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@(getUsersResult)" TextProperty="Email" ValueProperty="UserId" Placeholder="Choose User" style="display: block; width: 100%" @bind-Value="@(usermessage.UserId)" Name="UserId">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="UserId" Text="UserId is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Message" Component="MessageId" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@(getMessagesResult)" TextProperty="content" ValueProperty="MessageId" Placeholder="Choose Message" style="display: block; width: 100%" @bind-Value="@(usermessage.MessageId)" Name="MessageId">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="MessageId" Text="MessageId is required" style="position: absolute">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" ButtonStyle="ButtonStyle.Primary">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

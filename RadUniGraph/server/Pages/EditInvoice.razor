@@ -1,0 +1,72 @@
+﻿@page "/edit-invoice/{InvoiceId}"
+@layout MainLayout
+@inherits UniBlocksGraph.Pages.EditInvoiceComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using UniBlocksGraph.Models.UniSql
+@using Microsoft.AspNetCore.Identity
+@using UniBlocksGraph.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div style="" class="row">
+      <div class="col-md-9">
+        <RadzenLabel style="font-weight: bold" Text="Item no longer available." Visible="@(!canEdit)">
+        </RadzenLabel>
+      </div>
+      <div class="col-md-3">
+        <RadzenButton ButtonStyle="ButtonStyle.Secondary" style="margin-bottom: 20px" Text="Close" Visible="@(!canEdit)" Click="@CloseButtonClick">
+        </RadzenButton>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm TItem="UniBlocksGraph.Models.UniSql.Invoice" Data="@(invoice)" Visible="@(invoice != null && canEdit)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="A Service Subscription" Component="AServiceSubscriptionServiceId" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@(getAServiceSubscriptionsResult)" TextProperty="ServiceId" ValueProperty="ServiceId" Placeholder="Choose AServiceSubscription" style="width: 100%" @bind-Value="@(invoice.AServiceSubscriptionServiceId)" Name="AServiceSubscriptionServiceId">
+                </RadzenDropDown>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="A Service Subscription Subscription Id" Component="AServiceSubscriptionSubscriptionId" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="width: 100%" @bind-Value="@(invoice.AServiceSubscriptionSubscriptionId)" Name="AServiceSubscriptionSubscriptionId">
+                </RadzenNumeric>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Text="Transaction" Component="TransactionATransactionId" style="width: 100%">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@(getTransactionsResult)" TextProperty="TransactionType" ValueProperty="ATransactionId" Placeholder="Choose Transaction" style="width: 100%" @bind-Value="@(invoice.TransactionATransactionId)" Name="TransactionATransactionId">
+                </RadzenDropDown>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Save" ButtonStyle="ButtonStyle.Primary">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Text="Cancel" Click="@Button3Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

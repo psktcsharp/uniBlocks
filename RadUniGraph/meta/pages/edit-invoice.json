@@ -1,0 +1,322 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-9",
+              "components": [
+                {
+                  "name": "closeLabel",
+                  "style": {
+                    "fontWeight": "bold"
+                  },
+                  "text": "Item no longer available.",
+                  "type": "label",
+                  "visible": "${!canEdit}"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            },
+            {
+              "class": "col-md-3",
+              "components": [
+                {
+                  "buttonStyle": "secondary",
+                  "events": {
+                    "click": [
+                      {
+                        "type": "close-popup"
+                      }
+                    ]
+                  },
+                  "icon": "",
+                  "name": "closeButton",
+                  "style": {
+                    "marginBottom": "20px"
+                  },
+                  "text": "Close",
+                  "type": "button",
+                  "visible": "${!canEdit}"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "style": {},
+          "type": "row"
+        },
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "A Service Subscription",
+                              "component": "AServiceSubscriptionServiceId",
+                              "name": "AServiceSubscriptionServiceIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getAServiceSubscriptionsResult}",
+                              "textProperty": "ServiceId",
+                              "valueProperty": "ServiceId",
+                              "placeholder": "Choose AServiceSubscription",
+                              "valueType": "int?",
+                              "type": "dropdown",
+                              "name": "AServiceSubscriptionServiceId",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "value": "${invoice.AServiceSubscriptionServiceId}"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "A Service Subscription Subscription Id",
+                              "component": "AServiceSubscriptionSubscriptionId",
+                              "name": "AServiceSubscriptionSubscriptionIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "valueType": "int?",
+                              "type": "numeric",
+                              "name": "AServiceSubscriptionSubscriptionId",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "value": "${invoice.AServiceSubscriptionSubscriptionId}"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Transaction",
+                              "component": "TransactionATransactionId",
+                              "name": "TransactionATransactionIdLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getTransactionsResult}",
+                              "textProperty": "TransactionType",
+                              "valueProperty": "ATransactionId",
+                              "placeholder": "Choose Transaction",
+                              "valueType": "int?",
+                              "type": "dropdown",
+                              "name": "TransactionATransactionId",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "value": "${invoice.TransactionATransactionId}"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to update Invoice",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "UniSQL.updateInvoice",
+                        "parameters": [
+                          {
+                            "name": "InvoiceId",
+                            "value": "${parameters.InvoiceId}"
+                          },
+                          {
+                            "name": "Invoice",
+                            "value": "${invoice}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${invoice}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "UniBlocksGraph.Models.UniSql.Invoice",
+                  "data": "${invoice}",
+                  "visible": "${invoice != null && canEdit}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "canEdit",
+        "type": "set",
+        "value": "true",
+        "valueType": "bool"
+      },
+      {
+        "name": "UniSQL.getInvoiceByInvoiceId",
+        "parameters": [
+          {
+            "name": "InvoiceId",
+            "value": "${parameters.InvoiceId}"
+          }
+        ],
+        "then": [
+          {
+            "name": "invoice",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "UniBlocksGraph.Models.UniSql.Invoice"
+          }
+        ],
+        "error": [],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getAServiceSubscriptions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getAServiceSubscriptionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.AServiceSubscription>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "UniSQL.getTransactions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getTransactionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<UniBlocksGraph.Models.UniSql.Transaction>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "name": "Edit Invoice",
+  "layout": "Main",
+  "access": [
+    "Authenticated"
+  ]
+}
