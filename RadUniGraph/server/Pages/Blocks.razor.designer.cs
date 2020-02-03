@@ -33,7 +33,8 @@ namespace UniBlocksGraph.Pages
 
         [Inject]
         protected SecurityService Security { get; set; }
-
+ 
+      
 
         [Inject]
         protected UniSqlService UniSql { get; set; }
@@ -103,5 +104,6 @@ namespace UniBlocksGraph.Pages
                     NotificationService.Notify(NotificationSeverity.Error, $"Error", $"Unable to delete Block");
             }
         }
+      
     }
 }
