@@ -169,12 +169,12 @@ namespace HotGraphApi.UniBlocks.Data
             //uniBlocks.Database.EnsureDeleted();
             uniBlocks.Database.EnsureCreated();
             //get sender entity based on id
-            var sender = uniBlocks.Users.Find(input.senderId);
-            //get the list of users that the message will be sent to
-            var ToList = new List<User>();
+            var sender = uniBlocks.AspNetUsers.Find(input.senderId);
+            //get the list of AspNetUsers that the message will be sent to
+            var ToList = new List<AspNetUser>();
             foreach (var id in input.ToList)
             {
-                ToList.Add(uniBlocks.Users.Find(id));
+                ToList.Add(uniBlocks.AspNetUsers.Find(id));
             }
            
             var msgToSend = new Message();
@@ -237,12 +237,12 @@ namespace HotGraphApi.UniBlocks.Data
 
         //User Mutations
         public async Task<int> CreateUser(
-             User input,
+             AspNetUser input,
              [Service]UniBlocksDBContext uniBlocks)
             {
-                //uniBlocks.Database.EnsureDeleted();
+               // uniBlocks.Database.EnsureDeleted();
                 uniBlocks.Database.EnsureCreated();
-                uniBlocks.Add(input);
+                //uniBlocks.Add(input);
                 var insertUserResult = await uniBlocks.SaveChangesAsync();
                 return insertUserResult;
             }

@@ -18,11 +18,13 @@ namespace UniBlocksGraph
     {
         private readonly UniSqlContext context;
         private readonly NavigationManager navigationManager;
+        private SecurityService securityService;
 
-        public UniSqlService(UniSqlContext context, NavigationManager navigationManager)
+        public UniSqlService(UniSqlContext context, NavigationManager navigationManager, SecurityService securityService)
         {
             this.context = context;
             this.navigationManager = navigationManager;
+            this.securityService = securityService;
         }
 
         public async Task ExportAServiceSubscriptionsToExcel(Query query = null)
@@ -171,6 +173,8 @@ namespace UniBlocksGraph
 
         public async Task<IQueryable<Models.UniSql.Block>> GetBlocks(Query query = null)
         {
+            var role = securityService.Principal.Claims.ToArray()[3];
+            Console.WriteLine(role);
             var items = context.Blocks.AsQueryable().Include("BlockSubscriptions");
 
             if (query != null)

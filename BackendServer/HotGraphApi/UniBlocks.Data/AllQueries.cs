@@ -14,13 +14,13 @@ namespace HotGraphApi.UniBlocks.Data
     {
         // User Queries
         //--= get all users with subs
-        public List<User> GetUsersWithSubs(
+        public List<AspNetUser> GetUsersWithSubs(
           [Service]UniBlocksDBContext uniBlocks
           )
         {
             //due to a bug in ef core this will solve loading subs with user 
             //load both lists
-            var userList = uniBlocks.Users.ToList();
+            var userList = uniBlocks.AspNetUsers.ToList();
             var subs = uniBlocks.Subscriptions.Include("User").ToList();
             //loop through every use and detache from the context to avoid reader is open bug
             foreach (var user in userList)
@@ -30,7 +30,7 @@ namespace HotGraphApi.UniBlocks.Data
                 foreach (var sub in subs)
                 {
                     uniBlocks.Entry(sub).State = EntityState.Detached;
-                    if (user.UserId == sub.UserId)
+                    if (user.Id == sub.UserId)
                     {
                         user.Subscriptions.Add(sub);
                     }
@@ -40,17 +40,17 @@ namespace HotGraphApi.UniBlocks.Data
         }
         // User Queries
         //--= get all users with messages
-        public List<User> GetUsersWithMessages(
+        public List<AspNetUser> GetUsersWithMessages(
          [Service]UniBlocksDBContext uniBlocks
          )
         {
-            return uniBlocks.Users
+            return uniBlocks.AspNetUsers
                .Include(user => user.UserMessages).ThenInclude(userMessage => userMessage.Message).ToList();
         }
             //--= get User by id
-            public User GetUser(int userId,[Service]UniBlocksDBContext uniBlocks)
+            public AspNetUser GetUser(int userId,[Service]UniBlocksDBContext uniBlocks)
         {
-            return uniBlocks.Users.Find(userId);
+            return uniBlocks.AspNetUsers.Find(userId);
         }
         // Block Queries
         //--= get all blocks 

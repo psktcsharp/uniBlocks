@@ -13,7 +13,7 @@ namespace HotGraphApi.UniBlocks.Data.Models
         }
         public int MessageId { get; set; }
         public string content { get; set; }
-        public User Sender { get; set; }
+        public AspNetUser Sender { get; set; }
         public ICollection<UserMessages> UserMessages { get; set; }
     }
 }

@@ -45,7 +45,7 @@ namespace HotGraphApi
                 .HasForeignKey(pt => pt.BlockId);
 
             modelBuilder.Entity<BlockUser>()
-                .HasOne(pt => pt.User)
+                .HasOne(pt => pt.AspNetUser)
                 .WithMany(t => t.BlockUsers)
                 .HasForeignKey(pt => pt.UserId);
             //BlockSubscriptions
@@ -80,7 +80,7 @@ namespace HotGraphApi
         public DbSet<ATransaction> Transactions { get; set; }
         public DbSet<AService> Services { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<AspNetUser> AspNetUsers { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Balance> Balances { get; set; }
         public DbSet<AServiceSubscription> AServiceSubscriptions { get; set; }

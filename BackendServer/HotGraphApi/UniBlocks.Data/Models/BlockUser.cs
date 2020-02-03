@@ -5,7 +5,7 @@
         public int BlockId { get; set; }
         public int UserId { get; set; }
 
-        public User User { get; set; }
+        public AspNetUser AspNetUser { get; set; }
         public Block Block { get; set; }
     }
 }
