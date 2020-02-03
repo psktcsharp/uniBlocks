@@ -9,6 +9,9 @@
 @using UniBlocksGraph.Models
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
+@code{
+  
+}
 
 <RadzenContent Container="main">
   <ChildContent>
@@ -18,7 +21,7 @@
       <div class="col-md-12">
         <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
         </RadzenButton>
-        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getSubscriptionsResult)" TItem="UniBlocksGraph.Models.UniSql.Subscription" RowSelect="@Grid0RowSelect">
+        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getSubscriptionsResult)" TItem="UniBlocksGraph.Models.UniSql.Subscription" RowSelect="@Grid0RowSelect"  >
           <Columns>
             <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="SubscriptionId" Title="Subscription Id">
             </RadzenGridColumn>

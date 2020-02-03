@@ -569,7 +569,7 @@ namespace UniBlocksGraph
 
         public async Task<IQueryable<Models.UniSql.Subscription>> GetSubscriptions(Query query = null)
         {
-            var items = context.Subscriptions.AsQueryable();
+            var items = context.Subscriptions.Include(sub => sub.BlockSubscriptions).AsQueryable();
 
             items = items.Include(i => i.Balance);
 
@@ -579,7 +579,8 @@ namespace UniBlocksGraph
             {
                 if (!string.IsNullOrEmpty(query.Filter))
                 {
-                    items = items.Where(query.Filter);
+                    //items = items.Where(query.Filter);
+                    items = context.BlockSubscriptions.Include(b => b.Subscription).Where(query.Filter).Select(selector=> selector.Subscription).AsQueryable();
                 }
 
                 if (!string.IsNullOrEmpty(query.OrderBy))

@@ -16,6 +16,8 @@ namespace UniBlocksGraph.Pages
 {
     public partial class SubscriptionsComponent : ComponentBase
     {
+        [Parameter]
+        public int BlockId { get; set; }
         [Parameter(CaptureUnmatchedValues = true)]
         public IReadOnlyDictionary<string, dynamic> Attributes { get; set; }
 
@@ -65,13 +67,13 @@ namespace UniBlocksGraph.Pages
             }
             else
             {
-                await Load();
+                await Load(BlockId);
             }
 
         }
-        protected async System.Threading.Tasks.Task Load()
+        protected async System.Threading.Tasks.Task Load(int BlockId = 0)
         {
-            var uniSqlGetSubscriptionsResult = await UniSql.GetSubscriptions();
+            var uniSqlGetSubscriptionsResult = await UniSql.GetSubscriptions(new Query() { Filter = "b => b.BlockId ==" + BlockId.ToString()});
             getSubscriptionsResult = uniSqlGetSubscriptionsResult;
         }
 
