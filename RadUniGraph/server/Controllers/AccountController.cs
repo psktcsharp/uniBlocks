@@ -89,6 +89,7 @@ namespace UniBlocksGraph
                 normalUser.PhoneNumber = user.PhoneNumber;
                 normalUser.isUser = true;
                 normalUser.isAdmin = false;
+                normalUser.AspNetId = user.Id;
 
                 uniSqlContext.Users.Add(normalUser);
                 uniSqlContext.SaveChanges();

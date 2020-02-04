@@ -49,5 +49,6 @@ namespace UniBlocksGraph.Models.UniSql
       get;
       set;
     }
-  }
+        public string AspNetId { get; set; }
+    }
 }
