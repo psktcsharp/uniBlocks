@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using UniBlocksGraph.Models;
 using UniBlocksGraph.Data;
+using UniBlocksGraph.Models.UniSql;
 
 namespace UniBlocksGraph
 {
@@ -26,6 +27,7 @@ namespace UniBlocksGraph
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly NavigationManager uriHelper;
         private readonly AuthenticationStateProvider authenticationStateProvider;
+        private readonly UniSqlContext uniSqlContext;
 
         public SecurityService(ApplicationIdentityDbContext context,
             IWebHostEnvironment env,
@@ -34,7 +36,7 @@ namespace UniBlocksGraph
             SignInManager<ApplicationUser> signInManager,
             IHttpContextAccessor httpContextAccessor,
             NavigationManager uriHelper,
-            AuthenticationStateProvider authenticationStateProvider)
+            AuthenticationStateProvider authenticationStateProvider,UniSqlContext uniSqlContext)
         {
             this.context = context;
             this.userManager = userManager;
@@ -44,6 +46,7 @@ namespace UniBlocksGraph
             this.httpContextAccessor = httpContextAccessor;
             this.uriHelper = uriHelper;
             this.authenticationStateProvider = authenticationStateProvider;
+            this.uniSqlContext = uniSqlContext;
         }
 
         public ApplicationIdentityDbContext context { get; set; }
@@ -151,11 +154,16 @@ namespace UniBlocksGraph
 
         public async Task<ApplicationUser> CreateUser(ApplicationUser user)
         {
+          
             user.UserName = user.Email;
 
             var result = await userManager.CreateAsync(user, user.Password);
 
             EnsureSucceeded(result);
+
+           
+
+
 
             var roles = user.RoleNames;
 

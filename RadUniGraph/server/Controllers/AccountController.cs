@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using UniBlocksGraph.Data;
 using UniBlocksGraph.Models;
+using UniBlocksGraph.Models.UniSql;
 
 namespace UniBlocksGraph
 {
@@ -18,13 +20,15 @@ namespace UniBlocksGraph
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IWebHostEnvironment env;
+        private readonly UniSqlContext uniSqlContext;
 
-        public AccountController(IWebHostEnvironment env, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(IWebHostEnvironment env, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, UniSqlContext uniSqlContext)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.env = env;
+            this.uniSqlContext = uniSqlContext;
         }
 
         [HttpPost]
@@ -74,8 +78,22 @@ namespace UniBlocksGraph
 
             var result = await userManager.CreateAsync(user, password);
 
+           
+
             if (result.Succeeded)
             {
+                //create use in the seconde table
+                var normalUser = new User();
+                normalUser.Email = user.Email;
+                normalUser.Password = password;
+                normalUser.PhoneNumber = user.PhoneNumber;
+                normalUser.isUser = true;
+                normalUser.isAdmin = false;
+
+                uniSqlContext.Users.Add(normalUser);
+                uniSqlContext.SaveChanges();
+
+
                 await SendConfirmationEmail(userManager, user, Url, Request.Scheme);
                 return Redirect("~/Login");
             }
