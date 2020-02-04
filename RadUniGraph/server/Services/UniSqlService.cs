@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components;
 using UniBlocksGraph.Data;
+using UniBlocksGraph.Models.UniSql;
 
 namespace UniBlocksGraph
 {
@@ -18,11 +19,13 @@ namespace UniBlocksGraph
     {
         private readonly UniSqlContext context;
         private readonly NavigationManager navigationManager;
+        private readonly SecurityService securityService; 
 
-        public UniSqlService(UniSqlContext context, NavigationManager navigationManager)
+        public UniSqlService(UniSqlContext context, NavigationManager navigationManager, SecurityService securityService)
         {
             this.context = context;
             this.navigationManager = navigationManager;
+            this.securityService = securityService;
         }
 
         public async Task ExportAServiceSubscriptionsToExcel(Query query = null)
@@ -171,7 +174,36 @@ namespace UniBlocksGraph
 
         public async Task<IQueryable<Models.UniSql.Block>> GetBlocks(Query query = null)
         {
-            var items = context.Blocks.AsQueryable().Include("BlockSubscriptions");
+
+
+            //get logged in use from db
+            var loggedInUser = context.Users.Where(u => u.AspNetId == securityService.User.Id).First();
+
+            var temp = new List<Block>();
+            var itemsDb = context.Blocks.AsQueryable().Include("BlockSubscriptions");
+            //var blockSubs = context.Blocks.AsQueryable().Include("BlockSubscriptions");
+           
+            try
+            {
+                var blockUsers = context.BlockUsers.Where(bu => bu.UserId == loggedInUser.UserId);
+               
+                foreach (var item in itemsDb)
+                {
+                    if(blockUsers.Where(bu => bu.BlockId == item.BlockId).Count() > 0)
+                    {
+                        temp.Add(item);
+                    }
+                }
+           
+                ////get list of blocks for this use
+                Console.WriteLine(temp);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            var items = temp.AsQueryable();
 
             if (query != null)
             {
