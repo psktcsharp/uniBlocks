@@ -70,6 +70,7 @@ namespace UniBlocksGraph
             services.AddScoped<SecurityService>();
 
             services.AddScoped<UniSqlService>();
+            //services.AddTransient<AccountController>();
 
             services.AddDbContext<UniBlocksGraph.Data.UniSqlContext>(options =>
             {

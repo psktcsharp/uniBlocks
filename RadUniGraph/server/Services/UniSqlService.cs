@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components;
 using UniBlocksGraph.Data;
 using UniBlocksGraph.Models.UniSql;
+using UniBlocksGraph.Models;
 
 namespace UniBlocksGraph
 {
@@ -19,15 +20,34 @@ namespace UniBlocksGraph
     {
         private readonly UniSqlContext context;
         private readonly NavigationManager navigationManager;
-        private readonly SecurityService securityService; 
+        private readonly SecurityService securityService;
+      //  private readonly AccountController accountController;
 
         public UniSqlService(UniSqlContext context, NavigationManager navigationManager, SecurityService securityService)
         {
             this.context = context;
             this.navigationManager = navigationManager;
             this.securityService = securityService;
+           // this.accountController = accountController;
+
+           // seedDataBase();
         }
 
+        //public async Task<string> seedDataBase()
+        //{
+        //    try
+        //    {
+        //        //create users
+        //       await accountController.Register("buylibya@gmail.com", "aA@654321");
+        //       // await accountController.Register("buylibya@ammar.ly", "aA@654321");
+        //        return "Sucess";
+        //    }
+        //    catch (Exception error)
+        //    {
+
+        //        return error.InnerException.Message.ToString();
+        //    }
+        //}
         public async Task ExportAServiceSubscriptionsToExcel(Query query = null)
         {
             navigationManager.NavigateTo(query != null ? query.ToUrl("export/unisql/aservicesubscriptions/excel") : "export/unisql/aservicesubscriptions/excel", true);

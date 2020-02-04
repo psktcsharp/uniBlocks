@@ -78,7 +78,7 @@ namespace UniBlocksGraph.Pages
         protected async System.Threading.Tasks.Task Button0Click(MouseEventArgs args)
         {
             var result = await DialogService.OpenAsync<AddApplicationRole>("Add Application Role", null);
-              await InvokeAsync(() => { StateHasChanged(); });
+              await InvokeAsync(() => { grid0.Reload(); StateHasChanged(); });
         }
 
         protected async System.Threading.Tasks.Task GridDeleteButtonClick(MouseEventArgs args, IdentityRole data)

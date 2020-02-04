@@ -37,23 +37,23 @@ namespace UniBlocksGraph.Pages
 
         [Inject]
         protected UniSqlService UniSql { get; set; }
-
-        IdentityRole _role;
-        protected IdentityRole role
-        {
-            get
-            {
-                return _role;
-            }
-            set
-            {
-                if(!object.Equals(_role, value))
-                {
-                    _role = value;
-                    InvokeAsync(() => { StateHasChanged(); });
-                }
-            }
-        }
+        public string newRole { get; set; }
+        //IdentityRole _role;
+        public IdentityRole role { get; set; }
+        //{
+        //    get
+        //    {
+        //        return _role;
+        //    }
+        //    set
+        //    {
+        //        if(!object.Equals(_role, value))
+        //        {
+        //            _role = value;
+        //            InvokeAsync(() => { StateHasChanged(); });
+        //        }
+        //    }
+        //}
 
         protected override async System.Threading.Tasks.Task OnInitializedAsync()
         {
@@ -72,11 +72,12 @@ namespace UniBlocksGraph.Pages
             role = new IdentityRole();
         }
 
-        protected async System.Threading.Tasks.Task Form0Submit(IdentityRole args)
+        protected async System.Threading.Tasks.Task Form0Submit()
         {
             try
             {
-                var securityCreateRoleResult = await Security.CreateRole(args);
+                role = new IdentityRole() { Name = newRole, NormalizedName = newRole.ToUpper() };
+                var securityCreateRoleResult = await Security.CreateRole(role);
                 UriHelper.NavigateTo("application-roles");
             }
             catch (Exception securityCreateRoleException)

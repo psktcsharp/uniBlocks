@@ -34,16 +34,7 @@ namespace UniBlocksGraph.Models.UniSql
       get;
       set;
     }
-    public bool isUser
-    {
-      get;
-      set;
-    }
-    public bool isAdmin
-    {
-      get;
-      set;
-    }
+ 
     public string PhoneNumber
     {
       get;

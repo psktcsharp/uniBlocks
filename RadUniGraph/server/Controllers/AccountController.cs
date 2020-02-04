@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UniBlocksGraph.Data;
 using UniBlocksGraph.Models;
 using UniBlocksGraph.Models.UniSql;
@@ -28,7 +29,7 @@ namespace UniBlocksGraph
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.env = env;
-            this.uniSqlContext = uniSqlContext;
+           this.uniSqlContext = uniSqlContext;
         }
 
         [HttpPost]
@@ -50,10 +51,11 @@ namespace UniBlocksGraph
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
                 var user = await userManager.FindByNameAsync(userName);
-                if (!user.EmailConfirmed)
-                {
-                    return Redirect("~/Login?error=User email not confirmed");
-                }
+                //disabled for testing
+                //if (!user.EmailConfirmed)
+                //{
+                //    return Redirect("~/Login?error=User email not confirmed");
+                //}
 
                 var result = await signInManager.PasswordSignInAsync(userName, password, false, false);
 
@@ -69,6 +71,15 @@ namespace UniBlocksGraph
         [AllowAnonymous]
         public async Task<IActionResult> Register(string userName, string password)
         {
+            //create use in the seconde table
+            var normalUser = new User();
+            normalUser.Email = userName;
+            normalUser.Password = password;
+           
+
+            uniSqlContext.Users.Add(normalUser);
+            uniSqlContext.SaveChanges();
+
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
             {
                 return Redirect("~/Login?error=Invalid user or password");
@@ -82,19 +93,10 @@ namespace UniBlocksGraph
 
             if (result.Succeeded)
             {
-                //create use in the seconde table
-                var normalUser = new User();
-                normalUser.Email = user.Email;
-                normalUser.Password = password;
-                normalUser.PhoneNumber = user.PhoneNumber;
-                normalUser.isUser = true;
-                normalUser.isAdmin = false;
+
                 normalUser.AspNetId = user.Id;
-
-                uniSqlContext.Users.Add(normalUser);
+                uniSqlContext.Users.Update(normalUser);
                 uniSqlContext.SaveChanges();
-
-
                 await SendConfirmationEmail(userManager, user, Url, Request.Scheme);
                 return Redirect("~/Login");
             }
