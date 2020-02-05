@@ -341,3 +341,4 @@ healthchecksdb
 
 AspNetCoreGraph/appsettings.Development.json
 RadUniGraph
+BackendServer/HotGraphApi/appsettings.json
