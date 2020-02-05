@@ -120,6 +120,8 @@ namespace UniBlocksGraph.Pages
                 await Load();
             }
 
+         
+
         }
         protected async System.Threading.Tasks.Task Load()
         {

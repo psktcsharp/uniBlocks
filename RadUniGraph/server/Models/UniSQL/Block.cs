@@ -10,10 +10,12 @@ namespace UniBlocksGraph.Models.UniSql
   {
         [NotMapped]
         public int SubsCount {
-            get {
-                return BlockSubscriptions.Count;
-            }
-            set { } 
+            get;set;
+            //get {
+            //    //var block = this;
+            //    //    return BlockSubscriptions.Count;
+            //}
+            //set { } 
         }
         [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

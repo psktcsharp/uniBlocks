@@ -18,9 +18,10 @@ namespace HotGraphApi.UniBlocks.Data.Models
         [Required]
         public string Email { get; set; }
         public string Password { get; set; }
-        public bool isUser { get; set; }
-        public bool isAdmin { get; set; }
+        //public bool isUser { get; set; }
+        //public bool isAdmin { get; set; }
         public string PhoneNumber { get; set; }
+        public string AspNetId { get; set; }
         public ICollection<UserMessages> UserMessages { get; set; }
         public ICollection<Subscription> Subscriptions { get; set; }
         public ICollection<BlockUser> BlockUsers { get; set; }

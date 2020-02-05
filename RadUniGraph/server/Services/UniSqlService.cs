@@ -198,32 +198,31 @@ namespace UniBlocksGraph
 
             //get logged in use from db
             var loggedInUser = context.Users.Where(u => u.AspNetId == securityService.User.Id).First();
-
+            //temp blocks list for end result
             var temp = new List<Block>();
-            var itemsDb = context.Blocks.AsQueryable().Include("BlockSubscriptions");
-            //var blockSubs = context.Blocks.AsQueryable().Include("BlockSubscriptions");
-           
-            try
+            //get all blockssubs from database , get all subs via that .. make sure you are only getting subs 
+            //with a user id that matches the user id inside the sub
+            var deBlocksSubs = context.BlockSubscriptions.Include(bsub => bsub.Subscription).Include(bsub => bsub.Block)
+                .Where(bsub => bsub.Subscription.UserId == loggedInUser.UserId).AsQueryable();
+            //exract all blocks
+
+            
+            foreach (var bsub in deBlocksSubs)
             {
-                var blockUsers = context.BlockUsers.Where(bu => bu.UserId == loggedInUser.UserId);
-               
-                foreach (var item in itemsDb)
-                {
-                    if(blockUsers.Where(bu => bu.BlockId == item.BlockId).Count() > 0)
-                    {
-                        temp.Add(item);
-                    }
-                }
-           
-                ////get list of blocks for this use
-                Console.WriteLine(temp);
-            }
-            catch (Exception)
-            {
+                //subs count
+                var subsCount = context.BlockSubscriptions.Where(bu => bu.BlockId == bsub.BlockId).Select(selector => selector.SubscriptionId).Count();
 
 
+                bsub.Block.SubsCount = subsCount;
+
+                //Console.WriteLine(subsCount);
+                temp.Add(bsub.Block);
             }
-            var items = temp.AsQueryable();
+
+           
+            var items = temp.Distinct().AsQueryable();
+
+
 
             if (query != null)
             {
@@ -632,7 +631,25 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Filter))
                 {
                     //items = items.Where(query.Filter);
-                    items = context.BlockSubscriptions.Include(b => b.Subscription).Where(query.Filter).Select(selector=> selector.Subscription).AsQueryable();
+                    items = context.BlockSubscriptions.Include(b => b.Subscription).Include(b => b.Block)
+                        .Where(query.Filter)
+                        .Select(selector=> selector.Subscription).AsQueryable();
+
+                    //testing getting admins
+                    var blockUsers = context.BlockUsers.Include(bu => bu.Block);
+                    if (blockUsers == null)
+                    {
+                        Console.WriteLine(blockUsers.First().Block.SubsCount);
+                    }
+                    var temp = new List<Subscription>();
+                    foreach (var sub in items)
+                    {
+                        var user = context.Users.Find(sub.UserId);
+                        sub.User = user;
+                        temp.Add(sub);
+                        
+                    }
+                    items = temp.AsQueryable();
                 }
 
                 if (!string.IsNullOrEmpty(query.OrderBy))
