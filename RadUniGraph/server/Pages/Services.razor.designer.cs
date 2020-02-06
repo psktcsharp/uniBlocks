@@ -106,5 +106,22 @@ namespace UniBlocksGraph.Pages
                     NotificationService.Notify(NotificationSeverity.Error, $"Error", $"Unable to delete Service");
             }
         }
+        protected async System.Threading.Tasks.Task GridPayButtonClick(MouseEventArgs args, dynamic data)
+        {
+            try
+            {
+                
+                //var uniSqlDeleteServiceResult = await UniSql.DeleteService(data.AServiceId);
+                //if (uniSqlDeleteServiceResult != null)
+                //{
+                //    grid0.Reload();
+                //}
+
+    }
+            catch (Exception uniSqlDeleteServiceException)
+            {
+                NotificationService.Notify(NotificationSeverity.Error, $"Error", $"Unable to delete Service");
+            }
+        }
     }
 }

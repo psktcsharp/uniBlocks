@@ -10,44 +10,65 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 @code{
-  
+
 }
 
 <RadzenContent Container="main">
-  <ChildContent>
-    <RadzenHeading Size="H1" Text="Subscriptions">
-    </RadzenHeading>
-    <div class="row">
-      <div class="col-md-12">
-        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
-        </RadzenButton>
-        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getSubscriptionsResult)" TItem="UniBlocksGraph.Models.UniSql.Subscription" RowSelect="@Grid0RowSelect"  >
-          <Columns>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="SubscriptionId" Title="Subscription Id">
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="SubscriptionName" Title="Subscription Name">
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="BalanceId" SortProperty="Balance.BalanceId" FilterProperty="Balance.BalanceId" Title="Balance">
-              <Template Context="data">
-              @(data.Balance?.BalanceId)
-              </Template>
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="UserId" SortProperty="User.Email" FilterProperty="User.Email" Title="User">
-              <Template Context="data">
-              @(data.User?.Email)
-              </Template>
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="IsActive" Title="Is Active">
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
-              <Template Context="uniBlocksGraphModelsUniSqlSubscription">
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlSubscription))" @onclick:stopPropagation="true">
+    <ChildContent>
+        <RadzenHeading Size="H1" Text="Subscriptions">
+        </RadzenHeading>
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
                 </RadzenButton>
-              </Template>
-            </RadzenGridColumn>
-          </Columns>
-        </RadzenGrid>
-      </div>
-    </div>
-  </ChildContent>
+                <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getSubscriptionsResult)" TItem="UniBlocksGraph.Models.UniSql.Subscription" RowSelect="@Grid0RowSelect">
+                    <Columns>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="SubscriptionId" Title="Subscription Id">
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="SubscriptionName" Title="Subscription Name">
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="BalanceId" SortProperty="Balance.BalanceId" FilterProperty="Balance.BalanceId" Title="Balance">
+                            <Template Context="data">
+                                @(data.Balance?.BalanceId)
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="UserId" SortProperty="User.Email" FilterProperty="User.Email" Title="User">
+                            <Template Context="data">
+                                @(data.User?.Email)
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="IsActive" Title="Is Active">
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                            <Template Context="uniBlocksGraphModelsUniSqlSubscription">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) => GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlSubscription))" @onclick:stopPropagation="true">
+                                </RadzenButton>
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Title="Services Count">
+                            <Template Context="uniBlocksGraphModelsUniSqlBlock">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="build" Text="@uniBlocksGraphModelsUniSqlBlock.AServiceSubscriptions.Count.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowSubServices(uniBlocksGraphModelsUniSqlBlock.SubscriptionId))" @onclick:stopPropagation="true">
+                                </RadzenButton>
+                            </Template>
+                        </RadzenGridColumn>
+                    </Columns>
+                </RadzenGrid>
+
+                @if (showServices)
+                {
+                    <Services ></Services>
+                }
+            </div>
+        </div>
+    </ChildContent>
 </RadzenContent>
+@code{
+    public bool showServices { get; set; }
+    public int selectedSubId { get; set; }
+    public async System.Threading.Tasks.Task doShowSubServices(int subId)
+    {
+        selectedSubId = subId;
+        showServices = !showServices;
+       
+    }
+}

@@ -8,6 +8,7 @@
 @using Microsoft.AspNetCore.Identity
 @using UniBlocksGraph.Models
 @using Microsoft.AspNetCore.Authorization
+@inject IModalService Modal
 @attribute [Authorize]
 @code{
 
@@ -35,6 +36,15 @@
                                 </RadzenButton>
                             </Template>
                         </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Service" Context="uniBlocksGraphModelsUniSqlService" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                            <Template Context="uniBlocksGraphModelsUniSqlService">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="payment" Size="ButtonSize.Medium" Click="@(() => Modal.Show<Pay>("Payment For Service"))" @onclick:stopPropagation="true">
+
+                                </RadzenButton>
+                            </Template>
+                        </RadzenGridColumn>
+
+                     
                     </Columns>
                 </RadzenGrid>
             </div>
