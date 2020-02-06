@@ -10,63 +10,67 @@
 @using UniBlocksGraph.Models
 @using Microsoft.AspNetCore.Authorization
 @*@attribute [Authorize(Roles="Authenticated, Admin")]*@
+@inject IModalService Modal
+
 
 <RadzenContent Container="main">
-  <ChildContent>
-    <RadzenHeading Size="H1" Text="Blocks">
-    </RadzenHeading>
-    <div class="row">
-        <div class="col-md-12">
-            <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
-            </RadzenButton>
-            <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getBlocksResult)" TItem="UniBlocksGraph.Models.UniSql.Block" RowSelect="@Grid0RowSelect">
-                <Columns>
-                    <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="BlockId" Title="Block Id">
-                    </RadzenGridColumn>
-                    <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="BlockName" Title="Block Name">
-                    </RadzenGridColumn>
-                    <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="location" Title="Location">
-                    </RadzenGridColumn>
-                    <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="isActive" Title="Is Active">
-                    </RadzenGridColumn>
-                    <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" TextAlign="TextAlign.Center">
-                        <Template Context="uniBlocksGraphModelsUniSqlBlock">
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) => GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlBlock))" @onclick:stopPropagation="true">
-                            </RadzenButton>
-                        </Template>
-                    </RadzenGridColumn>
-                    <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Title="Subs Count">
-                        <Template Context="uniBlocksGraphModelsUniSqlBlock">
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="people" Text="@uniBlocksGraphModelsUniSqlBlock.SubsCount.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowSubs(uniBlocksGraphModelsUniSqlBlock.BlockId))" @onclick:stopPropagation="true">
-                            </RadzenButton>
-                        </Template>
-                    </RadzenGridColumn>
-                    <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Title="Services Count">
-                        <Template Context="uniBlocksGraphModelsUniSqlBlock">
-                            <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="build" Text="@uniBlocksGraphModelsUniSqlBlock.SubsCount.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowServices(uniBlocksGraphModelsUniSqlBlock.BlockId))" @onclick:stopPropagation="true">
-                            </RadzenButton>
-                        </Template>
-                    </RadzenGridColumn>
+    <ChildContent>
+        <RadzenHeading Size="H1" Text="Blocks">
+        </RadzenHeading>
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+                </RadzenButton>
+                @*<button @onclick="@(() => Modal.Show<Services>("All Services"))" class="btn btn-primary">Test Button</button>*@
 
-                </Columns>
-            </RadzenGrid>
-            @if (showSubs)
-            {
-                <Subscriptions BlockId="@selectedBlockId">
+                <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getBlocksResult)" TItem="UniBlocksGraph.Models.UniSql.Block" RowSelect="@Grid0RowSelect">
+                    <Columns>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="BlockId" Title="Block Id">
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="BlockName" Title="Block Name">
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="location" Title="Location">
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="isActive" Title="Is Active">
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" TextAlign="TextAlign.Center">
+                            <Template Context="uniBlocksGraphModelsUniSqlBlock">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) => GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlBlock))" @onclick:stopPropagation="true">
+                                </RadzenButton>
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Title="Subs Count">
+                            <Template Context="uniBlocksGraphModelsUniSqlBlock">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="people" Text="@uniBlocksGraphModelsUniSqlBlock.SubsCount.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowSubs(uniBlocksGraphModelsUniSqlBlock.BlockId))" @onclick:stopPropagation="true">
+                                </RadzenButton>
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Title="Services Count">
+                            <Template Context="uniBlocksGraphModelsUniSqlBlock">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="build" Text="@uniBlocksGraphModelsUniSqlBlock.SubsCount.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowServices(uniBlocksGraphModelsUniSqlBlock.BlockId))" @onclick:stopPropagation="true">
+                                </RadzenButton>
+                            </Template>
+                        </RadzenGridColumn>
 
-                </Subscriptions>
-            }
-            @if (showServices)
-            {
-                <Services BlockIdForService="@selectedBlockId">
+                    </Columns>
+                </RadzenGrid>
+                @if (showSubs)
+                {
+                    <Subscriptions BlockId="@selectedBlockId">
 
-                </Services>
-            }
+                    </Subscriptions>
+                }
+                @if (showServices)
+                {
+                    <Services BlockIdForService="@selectedBlockId">
+
+                    </Services>
+                }
+            </div>
         </div>
-    </div>
-  </ChildContent>
+    </ChildContent>
 </RadzenContent>
-@code{ 
+@code{
 
     protected override void OnInitialized()
     {
@@ -74,7 +78,7 @@
         showSubs = false;
         showServices = false;
     }
-    public string count  { get; set; }
+    public string count { get; set; }
     public int selectedBlockId { get; set; }
     public async System.Threading.Tasks.Task doShowSubs(int blockId)
     {

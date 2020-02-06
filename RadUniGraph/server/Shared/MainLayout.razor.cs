@@ -7,7 +7,7 @@ using Radzen.Blazor;
 
 namespace UniBlocksGraph.Layouts
 {
-    public partial class MainLayoutComponent
+    public partial class MainLayoutComponent 
     {
 
     }

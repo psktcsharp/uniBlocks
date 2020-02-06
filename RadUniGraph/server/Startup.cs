@@ -23,6 +23,7 @@ using UniBlocksGraph.Data;
 using UniBlocksGraph.Models;
 using UniBlocksGraph.Authentication;
 using Radzen;
+using Blazored.Modal;
 
 namespace UniBlocksGraph
 {
@@ -50,7 +51,7 @@ namespace UniBlocksGraph
                 BaseAddress = new Uri(uriHelper.BaseUri)
               };
             });
-
+            services.AddBlazoredModal();
             services.AddHttpClient();
 
             services.AddAuthentication();
