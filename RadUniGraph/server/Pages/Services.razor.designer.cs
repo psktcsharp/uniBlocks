@@ -38,6 +38,9 @@ namespace UniBlocksGraph.Pages
         [Inject]
         protected UniSqlService UniSql { get; set; }
 
+        [Parameter]
+        public int BlockIdForService { get; set; }
+
         protected RadzenGrid<UniBlocksGraph.Models.UniSql.Service> grid0;
 
         IEnumerable<UniBlocksGraph.Models.UniSql.Service> _getServicesResult;
@@ -65,13 +68,13 @@ namespace UniBlocksGraph.Pages
             }
             else
             {
-                await Load();
+                await Load(BlockIdForService);
             }
 
         }
-        protected async System.Threading.Tasks.Task Load()
+        protected async System.Threading.Tasks.Task Load(int BlockIdForService = 0)
         {
-            var uniSqlGetServicesResult = await UniSql.GetServices();
+            var uniSqlGetServicesResult = await UniSql.GetServices(new Query() { Filter = BlockIdForService.ToString() });
             getServicesResult = uniSqlGetServicesResult;
         }
 

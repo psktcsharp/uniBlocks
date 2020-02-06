@@ -194,8 +194,6 @@ namespace UniBlocksGraph
 
         public async Task<IQueryable<Models.UniSql.Block>> GetBlocks(Query query = null)
         {
-
-
             //get logged in use from db
             var loggedInUser = context.Users.Where(u => u.AspNetId == securityService.User.Id).First();
             //temp blocks list for end result
@@ -204,26 +202,18 @@ namespace UniBlocksGraph
             //with a user id that matches the user id inside the sub
             var deBlocksSubs = context.BlockSubscriptions.Include(bsub => bsub.Subscription).Include(bsub => bsub.Block)
                 .Where(bsub => bsub.Subscription.UserId == loggedInUser.UserId).AsQueryable();
-            //exract all blocks
-
-            
+            //exract all blocks   
             foreach (var bsub in deBlocksSubs)
             {
                 //subs count
                 var subsCount = context.BlockSubscriptions.Where(bu => bu.BlockId == bsub.BlockId).Select(selector => selector.SubscriptionId).Count();
-
-
                 bsub.Block.SubsCount = subsCount;
-
                 //Console.WriteLine(subsCount);
                 temp.Add(bsub.Block);
             }
 
            
             var items = temp.Distinct().AsQueryable();
-
-
-
             if (query != null)
             {
                 if (!string.IsNullOrEmpty(query.Filter))
@@ -562,7 +552,38 @@ namespace UniBlocksGraph
             {
                 if (!string.IsNullOrEmpty(query.Filter))
                 {
-                    items = items.Where(query.Filter);
+                    // items = items.Where(query.Filter);
+
+                    var tempList = items.Include(serv => serv.AServiceSubscriptions)
+                            .ThenInclude(ss => ss.Subscription)
+                            .ThenInclude(sub => sub.BlockSubscriptions).AsQueryable();
+
+                    var toAddList = new List<Service>();
+                  
+                    foreach (var item in tempList)
+                    {
+                        foreach(var ss in item.AServiceSubscriptions)
+                        {
+                            var sub = ss.Subscription;
+                            var blocksub = sub.BlockSubscriptions;
+                            foreach (var bs in blocksub)
+                            {
+                                if(bs.BlockId.ToString() == query.Filter) 
+                                { 
+                                    toAddList.Add(item); 
+                                } 
+                               
+                                
+                            }
+                            //if( ss. == int.Parse(query.Filter))
+                            //{
+                            //    toAddList.Add(item);
+                            //}
+
+                        }
+                    }
+                    items = toAddList.AsQueryable();
+
                 }
 
                 if (!string.IsNullOrEmpty(query.OrderBy))

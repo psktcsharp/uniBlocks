@@ -71,7 +71,7 @@ namespace UniBlocksGraph.Pages
             }
 
         }
-        protected async System.Threading.Tasks.Task Load(int BlockId = 0)
+        protected async System.Threading.Tasks.Task Load(int BlockId =0)
         {
             var uniSqlGetSubscriptionsResult = await UniSql.GetSubscriptions(new Query() { Filter = "b => b.BlockId ==" + BlockId.ToString()});
             getSubscriptionsResult = uniSqlGetSubscriptionsResult;
