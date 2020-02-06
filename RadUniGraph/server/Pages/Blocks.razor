@@ -21,7 +21,7 @@
             <div class="col-md-12">
                 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
                 </RadzenButton>
-                @*<button @onclick="@(() => Modal.Show<Services>("All Services"))" class="btn btn-primary">Test Button</button>*@
+                <button @onclick="@(() => Modal.Show<InvoicesComponent>("test"))" class="btn btn-primary">Test Button</button>
 
                 <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getBlocksResult)" TItem="UniBlocksGraph.Models.UniSql.Block" RowSelect="@Grid0RowSelect">
                     <Columns>

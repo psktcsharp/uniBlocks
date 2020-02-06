@@ -21,16 +21,16 @@ namespace UniBlocksGraph
         private readonly UniSqlContext context;
         private readonly NavigationManager navigationManager;
         private readonly SecurityService securityService;
-      //  private readonly AccountController accountController;
+        //  private readonly AccountController accountController;
 
         public UniSqlService(UniSqlContext context, NavigationManager navigationManager, SecurityService securityService)
         {
             this.context = context;
             this.navigationManager = navigationManager;
             this.securityService = securityService;
-           // this.accountController = accountController;
+            // this.accountController = accountController;
 
-           // seedDataBase();
+            // seedDataBase();
         }
 
         //public async Task<string> seedDataBase()
@@ -83,7 +83,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -147,7 +147,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -212,7 +212,7 @@ namespace UniBlocksGraph
                 temp.Add(bsub.Block);
             }
 
-           
+
             var items = temp.Distinct().AsQueryable();
             if (query != null)
             {
@@ -229,7 +229,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -297,7 +297,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -365,7 +365,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -433,7 +433,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -499,7 +499,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -559,21 +559,21 @@ namespace UniBlocksGraph
                             .ThenInclude(sub => sub.BlockSubscriptions).AsQueryable();
 
                     var toAddList = new List<Service>();
-                  
+
                     foreach (var item in tempList)
                     {
-                        foreach(var ss in item.AServiceSubscriptions)
+                        foreach (var ss in item.AServiceSubscriptions)
                         {
                             var sub = ss.Subscription;
                             var blocksub = sub.BlockSubscriptions;
                             foreach (var bs in blocksub)
                             {
-                                if(bs.BlockId.ToString() == query.Filter) 
-                                { 
-                                    toAddList.Add(item); 
-                                } 
-                               
-                                
+                                if (bs.BlockId.ToString() == query.Filter)
+                                {
+                                    toAddList.Add(item);
+                                }
+
+
                             }
                             //if( ss. == int.Parse(query.Filter))
                             //{
@@ -594,7 +594,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -654,7 +654,7 @@ namespace UniBlocksGraph
                     //items = items.Where(query.Filter);
                     items = context.BlockSubscriptions.Include(b => b.Subscription).Include(b => b.Block)
                         .Where(query.Filter)
-                        .Select(selector=> selector.Subscription).AsQueryable();
+                        .Select(selector => selector.Subscription).AsQueryable();
 
                     //testing getting admins
                     var blockUsers = context.BlockUsers.Include(bu => bu.Block);
@@ -668,7 +668,7 @@ namespace UniBlocksGraph
                         var user = context.Users.Find(sub.UserId);
                         sub.User = user;
                         temp.Add(sub);
-                        
+
                     }
                     items = temp.AsQueryable();
                 }
@@ -681,7 +681,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -745,7 +745,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -809,7 +809,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -877,7 +877,7 @@ namespace UniBlocksGraph
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
-                    foreach(var p in propertiesToExpand)
+                    foreach (var p in propertiesToExpand)
                     {
                         items = items.Include(p);
                     }
@@ -1437,6 +1437,7 @@ namespace UniBlocksGraph
             return item;
         }
 
+
         partial void OnSubscriptionUpdated(Models.UniSql.Subscription item);
 
         public async Task<Models.UniSql.Subscription> UpdateSubscription(int? subscriptionId, Models.UniSql.Subscription subscription)
@@ -1632,6 +1633,28 @@ namespace UniBlocksGraph
             context.SaveChanges();
 
             return userMessage;
+        }
+
+        //custom invoice call
+        public async Task<IQueryable<Models.UniSql.Invoice>> GetInvoicesCustom()
+        {
+            //get logged in use from db
+            var loggedInUser = context.Users.Where(u => u.AspNetId == securityService.User.Id).First();
+            var invoices = context.Invoices
+                .Include(invo => invo.Transaction)
+                .Include(invo => invo.AServiceSubscription)
+                .ThenInclude(ss => ss.Subscription)
+                .ThenInclude(sub => sub.User)
+                .Where(invoice => invoice.AServiceSubscription.Subscription.UserId == loggedInUser.UserId)
+                .AsQueryable();
+
+            //set service name
+            foreach (var invoice in invoices)
+            {
+                var service = context.Services.Find(invoice.AServiceSubscriptionServiceId);
+                invoice.AServiceSubscription.Service = service;
+            }
+            return invoices;
         }
     }
 }

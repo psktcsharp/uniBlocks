@@ -11,38 +11,33 @@
 @attribute [Authorize]
 
 <RadzenContent Container="main">
-  <ChildContent>
-    <RadzenHeading Size="H1" Text="Invoices">
-    </RadzenHeading>
-    <div class="row">
-      <div class="col-md-12">
-        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
-        </RadzenButton>
-        <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getInvoicesResult)" TItem="UniBlocksGraph.Models.UniSql.Invoice" RowSelect="@Grid0RowSelect">
-          <Columns>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Invoice" Context="uniBlocksGraphModelsUniSqlInvoice" Property="InvoiceId" Title="Invoice Id">
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Invoice" Context="uniBlocksGraphModelsUniSqlInvoice" Property="AServiceSubscriptionServiceId" SortProperty="AServiceSubscription.ServiceId" FilterProperty="AServiceSubscription.ServiceId" Title="A Service Subscription">
-              <Template Context="data">
-              @(data.AServiceSubscription?.ServiceId)
-              </Template>
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Invoice" Context="uniBlocksGraphModelsUniSqlInvoice" Property="AServiceSubscriptionSubscriptionId" Title="A Service Subscription Subscription Id">
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Invoice" Context="uniBlocksGraphModelsUniSqlInvoice" Property="TransactionATransactionId" SortProperty="Transaction.TransactionType" FilterProperty="Transaction.TransactionType" Title="Transaction">
-              <Template Context="data">
-              @(data.Transaction?.TransactionType)
-              </Template>
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Invoice" Context="uniBlocksGraphModelsUniSqlInvoice" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
-              <Template Context="uniBlocksGraphModelsUniSqlInvoice">
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlInvoice))" @onclick:stopPropagation="true">
-                </RadzenButton>
-              </Template>
-            </RadzenGridColumn>
-          </Columns>
-        </RadzenGrid>
-      </div>
-    </div>
-  </ChildContent>
+    <ChildContent>
+        <RadzenHeading Size="H1" Text="Invoices">
+        </RadzenHeading>
+        <div class="row">
+            <div class="col-md-12">  
+                @*RowSelect="@Grid0RowSelect"*@
+                <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@Payments" TItem="UniBlocksGraph.Models.UniSql.Invoice">
+                    <Columns>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Invoice" Context="uniBlocksGraphModelsUniSqlInvoice" Property="InvoiceId" Title="Invoice Id">
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Invoice" Context="uniBlocksGraphModelsUniSqlInvoice" Property="AServiceSubscription.Service.ServiceName" Title="Service Name">
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Invoice" Context="uniBlocksGraphModelsUniSqlInvoice" Property="Transaction.Amount" Title="Amount">
+                        </RadzenGridColumn>
+                    </Columns>
+                </RadzenGrid>
+            </div>
+        </div>
+    </ChildContent>
 </RadzenContent>
+@inject UniSqlService uniSqlService
+@code {
+    public IEnumerable<Invoice> Payments { get; set; }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Payments = new List<Invoice>();
+        Payments = uniSqlService.GetInvoicesCustom().Result;
+    }
+}
