@@ -17,6 +17,8 @@ namespace UniBlocksGraph.Models.UniSql
             //}
             //set { } 
         }
+        [NotMapped]
+        public int ServicesCount { get; set; }
         [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int BlockId

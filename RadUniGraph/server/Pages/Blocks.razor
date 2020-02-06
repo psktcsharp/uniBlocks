@@ -47,7 +47,7 @@
                         </RadzenGridColumn>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Title="Services Count">
                             <Template Context="uniBlocksGraphModelsUniSqlBlock">
-                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="build" Text="@uniBlocksGraphModelsUniSqlBlock.SubsCount.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowServices(uniBlocksGraphModelsUniSqlBlock.BlockId))" @onclick:stopPropagation="true">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="build" Text="@uniBlocksGraphModelsUniSqlBlock.ServicesCount.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowServices(uniBlocksGraphModelsUniSqlBlock.BlockId))" @onclick:stopPropagation="true">
                                 </RadzenButton>
                             </Template>
                         </RadzenGridColumn>

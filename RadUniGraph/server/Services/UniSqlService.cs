@@ -227,9 +227,15 @@ namespace UniBlocksGraph
             //subs count 
             foreach (var block in temp)
             {
-                //subs count
+                //subs and service count
                 var subsCount = context.BlockSubscriptions.Where(bu => bu.BlockId == block.BlockId).Select(selector => selector.SubscriptionId).Count();
+                var serviceCount = context.BlockSubscriptions.Where(b => b.BlockId == block.BlockId)
+                   .Include(b => b.Subscription)
+                   .ThenInclude(s => s.AServiceSubscriptions)
+                   .Count();
+         
                 block.SubsCount = subsCount;
+                block.ServicesCount = serviceCount;
             }
 
             //clean from dublicated blocks
