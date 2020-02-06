@@ -219,11 +219,17 @@ namespace UniBlocksGraph
             //exract all blocks   
             foreach (var bsub in deBlocksSubs)
             {
-                //subs count
-                var subsCount = context.BlockSubscriptions.Where(bu => bu.BlockId == bsub.BlockId).Select(selector => selector.SubscriptionId).Count();
-                bsub.Block.SubsCount = subsCount;
+              
                 //Console.WriteLine(subsCount);
                 temp.Add(bsub.Block);
+            }
+
+            //subs count 
+            foreach (var block in temp)
+            {
+                //subs count
+                var subsCount = context.BlockSubscriptions.Where(bu => bu.BlockId == block.BlockId).Select(selector => selector.SubscriptionId).Count();
+                block.SubsCount = subsCount;
             }
 
             //clean from dublicated blocks
