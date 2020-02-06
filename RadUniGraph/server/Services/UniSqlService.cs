@@ -202,6 +202,20 @@ namespace UniBlocksGraph
             //with a user id that matches the user id inside the sub
             var deBlocksSubs = context.BlockSubscriptions.Include(bsub => bsub.Subscription).Include(bsub => bsub.Block)
                 .Where(bsub => bsub.Subscription.UserId == loggedInUser.UserId).AsQueryable();
+
+            //get blocks if he is an admin only without having a sub
+            var blocksByAdmin = context.Blocks.Include(b => b.BlockUsers).AsQueryable();
+            //extract all blocks that matches the logged in user id     
+            foreach (var block in blocksByAdmin)
+            {
+                foreach (var blockuser in block.BlockUsers)
+                {
+                    if (blockuser.UserId == loggedInUser.UserId)
+                    {
+                        temp.Add(block);
+                    }
+                }
+            }
             //exract all blocks   
             foreach (var bsub in deBlocksSubs)
             {
@@ -212,7 +226,7 @@ namespace UniBlocksGraph
                 temp.Add(bsub.Block);
             }
 
-
+            //clean from dublicated blocks
             var items = temp.Distinct().AsQueryable();
             if (query != null)
             {
