@@ -17,6 +17,8 @@ namespace UniBlocksGraph.Pages
     public partial class SubscriptionsComponent : ComponentBase
     {
         [Parameter]
+        public int selectedSubId { get; set; }
+        [Parameter]
         public int BlockId { get; set; }
         [Parameter(CaptureUnmatchedValues = true)]
         public IReadOnlyDictionary<string, dynamic> Attributes { get; set; }

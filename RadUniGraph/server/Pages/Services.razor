@@ -36,6 +36,8 @@
                                 </RadzenButton>
                             </Template>
                         </RadzenGridColumn>
+                        @if (SubIdForService != 0)
+                        {
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Service" Context="uniBlocksGraphModelsUniSqlService" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
                             <Template Context="uniBlocksGraphModelsUniSqlService">
                                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="payment" Size="ButtonSize.Medium" Click="@(() => Modal.Show<Pay>("Payment For Service"))" @onclick:stopPropagation="true">
@@ -43,8 +45,8 @@
                                 </RadzenButton>
                             </Template>
                         </RadzenGridColumn>
+                        }
 
-                     
                     </Columns>
                 </RadzenGrid>
             </div>
