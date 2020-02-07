@@ -32,19 +32,19 @@
                         </RadzenGridColumn>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Service" Context="uniBlocksGraphModelsUniSqlService" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
                             <Template Context="uniBlocksGraphModelsUniSqlService">
-                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlService))" @onclick:stopPropagation="true">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) => GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlService))" @onclick:stopPropagation="true">
                                 </RadzenButton>
                             </Template>
                         </RadzenGridColumn>
                         @if (SubIdForService != 0)
                         {
-                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Service" Context="uniBlocksGraphModelsUniSqlService" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
-                            <Template Context="uniBlocksGraphModelsUniSqlService">
-                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="payment" Size="ButtonSize.Medium" Click="@(() => Modal.Show<Pay>("Payment For Service"))" @onclick:stopPropagation="true">
+                            <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Service" Context="uniBlocksGraphModelsUniSqlService" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                                <Template Context="uniBlocksGraphModelsUniSqlService">
+                                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="payment" Size="ButtonSize.Medium" Click="@(() => ShowPay(uniBlocksGraphModelsUniSqlService.AServiceId, SubIdForService))" class="btn btn-primary" @onclick:stopPropagation="true">
 
-                                </RadzenButton>
-                            </Template>
-                        </RadzenGridColumn>
+                                    </RadzenButton>
+                                </Template>
+                            </RadzenGridColumn>
                         }
 
                     </Columns>
@@ -53,3 +53,14 @@
         </div>
     </ChildContent>
 </RadzenContent>
+@code{
+    void ShowPay(int serviceId,int subId)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("ServiceId", serviceId);
+        parameters.Add("SubId", subId);
+
+        Modal.Show<Pay>
+("Payment", parameters);
+    }
+}
