@@ -26,16 +26,7 @@
                 </RadzenTextBox>
               </div>
             </div>
-            <div style="margin-bottom: 1rem" class="row">
-              <div class="col-md-3">
-                <RadzenLabel Text="Balance" Component="BalanceId" style="width: 100%">
-                </RadzenLabel>
-              </div>
-              <div class="col-md-9">
-                <RadzenDropDown Data="@(getBalancesResult)" TextProperty="BalanceId" ValueProperty="BalanceId" Placeholder="Choose Balance" style="width: 100%" @bind-Value="@(subscription.BalanceId)" Name="BalanceId">
-                </RadzenDropDown>
-              </div>
-            </div>
+    
             <div style="margin-bottom: 1rem" class="row">
               <div class="col-md-3">
                 <RadzenLabel Text="User" Component="UserId" style="width: 100%">

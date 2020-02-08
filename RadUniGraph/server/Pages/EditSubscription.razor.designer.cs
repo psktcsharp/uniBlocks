@@ -75,22 +75,6 @@ namespace UniBlocksGraph.Pages
             }
         }
 
-        IEnumerable<UniBlocksGraph.Models.UniSql.Balance> _getBalancesResult;
-        protected IEnumerable<UniBlocksGraph.Models.UniSql.Balance> getBalancesResult
-        {
-            get
-            {
-                return _getBalancesResult;
-            }
-            set
-            {
-                if(!object.Equals(_getBalancesResult, value))
-                {
-                    _getBalancesResult = value;
-                    InvokeAsync(() => { StateHasChanged(); });
-                }
-            }
-        }
 
         IEnumerable<UniBlocksGraph.Models.UniSql.User> _getUsersResult;
         protected IEnumerable<UniBlocksGraph.Models.UniSql.User> getUsersResult
@@ -130,8 +114,7 @@ namespace UniBlocksGraph.Pages
             var uniSqlGetSubscriptionBySubscriptionIdResult = await UniSql.GetSubscriptionBySubscriptionId(int.Parse($"{SubscriptionId}"));
             subscription = uniSqlGetSubscriptionBySubscriptionIdResult;
 
-            var uniSqlGetBalancesResult = await UniSql.GetBalances();
-            getBalancesResult = uniSqlGetBalancesResult;
+       
 
             var uniSqlGetUsersResult = await UniSql.GetUsers();
             getUsersResult = uniSqlGetUsersResult;

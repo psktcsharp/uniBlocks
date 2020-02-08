@@ -52,7 +52,10 @@ namespace UniBlocksGraph
         {
             navigationManager.NavigateTo(query != null ? query.ToUrl("export/unisql/aservicesubscriptions/excel") : "export/unisql/aservicesubscriptions/excel", true);
         }
-
+        public void ensureCreated()
+        {
+            context.Database.EnsureCreated();
+        }
         public async Task ExportAServiceSubscriptionsToCSV(Query query = null)
         {
             navigationManager.NavigateTo(query != null ? query.ToUrl("export/unisql/aservicesubscriptions/csv") : "export/unisql/aservicesubscriptions/csv", true);
@@ -126,60 +129,9 @@ namespace UniBlocksGraph
             navigationManager.NavigateTo(query != null ? query.ToUrl("export/unisql/balances/csv") : "export/unisql/balances/csv", true);
         }
 
-        partial void OnBalancesRead(ref IQueryable<Models.UniSql.Balance> items);
+  
 
-        public async Task<IQueryable<Models.UniSql.Balance>> GetBalances(Query query = null)
-        {
-            var items = context.Balances.AsQueryable();
 
-            if (query != null)
-            {
-                if (!string.IsNullOrEmpty(query.Filter))
-                {
-                    items = items.Where(query.Filter);
-                }
-
-                if (!string.IsNullOrEmpty(query.OrderBy))
-                {
-                    items = items.OrderBy(query.OrderBy);
-                }
-
-                if (!string.IsNullOrEmpty(query.Expand))
-                {
-                    var propertiesToExpand = query.Expand.Split(',');
-                    foreach (var p in propertiesToExpand)
-                    {
-                        items = items.Include(p);
-                    }
-                }
-
-                if (query.Skip.HasValue)
-                {
-                    items = items.Skip(query.Skip.Value);
-                }
-
-                if (query.Top.HasValue)
-                {
-                    items = items.Take(query.Top.Value);
-                }
-            }
-
-            OnBalancesRead(ref items);
-
-            return await Task.FromResult(items);
-        }
-
-        partial void OnBalanceCreated(Models.UniSql.Balance item);
-
-        public async Task<Models.UniSql.Balance> CreateBalance(Models.UniSql.Balance balance)
-        {
-            OnBalanceCreated(balance);
-
-            context.Balances.Add(balance);
-            context.SaveChanges();
-
-            return balance;
-        }
         public async Task ExportBlocksToExcel(Query query = null)
         {
             navigationManager.NavigateTo(query != null ? query.ToUrl("export/unisql/blocks/excel") : "export/unisql/blocks/excel", true);
@@ -669,7 +621,7 @@ namespace UniBlocksGraph
         {
             var items = context.Subscriptions.Include(sub => sub.BlockSubscriptions).AsQueryable();
 
-            items = items.Include(i => i.Balance);
+       
 
             items = items.Include(i => i.User);
 
@@ -999,63 +951,7 @@ namespace UniBlocksGraph
             return aServiceSubscription;
         }
 
-        partial void OnBalanceDeleted(Models.UniSql.Balance item);
-
-        public async Task<Models.UniSql.Balance> DeleteBalance(int? balanceId)
-        {
-            var item = context.Balances
-                              .Where(i => i.BalanceId == balanceId)
-                              .Include(i => i.Subscriptions)
-                              .FirstOrDefault();
-
-            OnBalanceDeleted(item);
-
-            context.Balances.Remove(item);
-            context.SaveChanges();
-
-            return item;
-        }
-
-        partial void OnBalanceGet(Models.UniSql.Balance item);
-
-        public async Task<Models.UniSql.Balance> GetBalanceByBalanceId(int? balanceId)
-        {
-            var items = context.Balances
-                              .AsNoTracking()
-                              .Where(i => i.BalanceId == balanceId);
-
-            var item = items.FirstOrDefault();
-
-            OnBalanceGet(item);
-
-            return await Task.FromResult(item);
-        }
-
-        public async Task<Models.UniSql.Balance> CancelBalanceChanges(Models.UniSql.Balance item)
-        {
-            var entity = context.Entry(item);
-            entity.CurrentValues.SetValues(entity.OriginalValues);
-            entity.State = EntityState.Unchanged;
-
-            return item;
-        }
-
-        partial void OnBalanceUpdated(Models.UniSql.Balance item);
-
-        public async Task<Models.UniSql.Balance> UpdateBalance(int? balanceId, Models.UniSql.Balance balance)
-        {
-            OnBalanceUpdated(balance);
-
-            var item = context.Balances
-                              .Where(i => i.BalanceId == balanceId)
-                              .First();
-            var entry = context.Entry(item);
-            entry.CurrentValues.SetValues(balance);
-            entry.State = EntityState.Modified;
-            context.SaveChanges();
-
-            return balance;
-        }
+       
 
         partial void OnBlockDeleted(Models.UniSql.Block item);
 
@@ -1443,7 +1339,7 @@ namespace UniBlocksGraph
                               .AsNoTracking()
                               .Where(i => i.SubscriptionId == subscriptionId);
 
-            items = items.Include(i => i.Balance);
+       
 
             items = items.Include(i => i.User);
 
@@ -1681,6 +1577,32 @@ namespace UniBlocksGraph
                 invoice.AServiceSubscription.Service = service;
             }
             return invoices;
+        }
+        //create custom transaction
+        public async Task<int> CreateCustomTransaction(int serviceId,int subId,decimal amount)
+        {
+            
+            //create transaction
+            var transactionToSave = new Transaction();
+            transactionToSave.Amount = amount;
+            if(amount < 0)
+            transactionToSave.TransactionType = "withdrawal";
+            else { transactionToSave.TransactionType = "deposit"; }
+            //save to database to get id
+            context.Add(transactionToSave);
+            await context.SaveChangesAsync();
+            //get AServiceSubscription entity to add while creating the invoice
+            var aServiceSubscription = context.AServiceSubscriptions.Where(ss => ss.SubscriptionId == subId & ss.ServiceId == serviceId).FirstOrDefault();
+            //create invoice
+            var invoiceToSave = new Invoice();
+            invoiceToSave.AServiceSubscription = aServiceSubscription;
+            invoiceToSave.Transaction = transactionToSave;
+            //save to database 
+            context.Add(invoiceToSave);
+          var saveResult =  await context.SaveChangesAsync();
+
+          
+            return saveResult;
         }
     }
 }

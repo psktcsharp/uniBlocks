@@ -83,11 +83,7 @@ namespace UniBlocksGraph.Data
               .WithMany(i => i.Messages)
               .HasForeignKey(i => i.SenderUserId)
               .HasPrincipalKey(i => i.UserId);
-        builder.Entity<UniBlocksGraph.Models.UniSql.Subscription>()
-              .HasOne(i => i.Balance)
-              .WithMany(i => i.Subscriptions)
-              .HasForeignKey(i => i.BalanceId)
-              .HasPrincipalKey(i => i.BalanceId);
+
         builder.Entity<UniBlocksGraph.Models.UniSql.Subscription>()
               .HasOne(i => i.User)
               .WithMany(i => i.Subscriptions)
@@ -115,11 +111,7 @@ namespace UniBlocksGraph.Data
       set;
     }
 
-    public DbSet<UniBlocksGraph.Models.UniSql.Balance> Balances
-    {
-      get;
-      set;
-    }
+  
 
     public DbSet<UniBlocksGraph.Models.UniSql.Block> Blocks
     {

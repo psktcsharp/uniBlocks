@@ -24,17 +24,7 @@ namespace UniBlocksGraph
             return ToExcel(ApplyQuery(context.AServiceSubscriptions, Request.Query));
         }
 
-        [HttpGet("/export/UniSql/balances/csv")]
-        public FileStreamResult ExportBalancesToCSV()
-        {
-            return ToCSV(ApplyQuery(context.Balances, Request.Query));
-        }
-
-        [HttpGet("/export/UniSql/balances/excel")]
-        public FileStreamResult ExportBalancesToExcel()
-        {
-            return ToExcel(ApplyQuery(context.Balances, Request.Query));
-        }
+      
 
         [HttpGet("/export/UniSql/blocks/csv")]
         public FileStreamResult ExportBlocksToCSV()

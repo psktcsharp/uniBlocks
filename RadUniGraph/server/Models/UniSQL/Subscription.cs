@@ -25,12 +25,8 @@ namespace UniBlocksGraph.Models.UniSql
       get;
       set;
     }
-    public int? BalanceId
-    {
-      get;
-      set;
-    }
-    public Balance Balance { get; set; }
+
+   
     public int UserId
     {
       get;

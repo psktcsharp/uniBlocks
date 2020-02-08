@@ -71,6 +71,19 @@ namespace HotGraphApi.UniBlocks.Data
             return uniBlocks.Blocks.Include(b => b.BlockSubscriptions).ThenInclude(bs => bs.Subscription).ThenInclude(sub => sub.User).
                 Where(b => b.BlockId == blockId).First();
         }
+        //--= get block by id with it's services
+        public Block GetBlockServices(int blockId, [Service]UniBlocksDBContext uniBlocks)
+        {
+
+            return uniBlocks.Blocks.Where(b => b.BlockId == blockId).
+                Include(b => b.BlockSubscriptions)
+                .ThenInclude(bs => bs.Subscription)
+                .ThenInclude(sub => sub.AServiceSubscriptions)
+                .ThenInclude(ss => ss.Service)
+                .AsQueryable().First();
+               
+                
+        }
         // Service Queries
         //--= get all services with the subscriptions
         public List<AService> GetServices(

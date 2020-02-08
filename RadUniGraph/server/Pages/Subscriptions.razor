@@ -27,11 +27,7 @@
                         </RadzenGridColumn>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="SubscriptionName" Title="Subscription Name">
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="BalanceId" SortProperty="Balance.BalanceId" FilterProperty="Balance.BalanceId" Title="Balance">
-                            <Template Context="data">
-                                @(data.Balance?.BalanceId)
-                            </Template>
-                        </RadzenGridColumn>
+                    
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="UserId" SortProperty="User.Email" FilterProperty="User.Email" Title="User">
                             <Template Context="data">
                                 @(data.User?.Email)
