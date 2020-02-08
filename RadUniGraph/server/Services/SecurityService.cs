@@ -63,8 +63,17 @@ namespace UniBlocksGraph
                 {
                     return new ApplicationUser() { UserName = name };
                 }
-
-                return user = user ?? userManager.FindByEmailAsync(name).Result;
+                var foundUser = userManager.FindByEmailAsync(name).Result;
+                //check if user is an admin in any block, if not redirect him to the user dashboard
+                var userFromDb = uniSqlContext.Users.Where(u => u.AspNetId == foundUser.Id)
+                    .Include(u => u.BlockUsers).First();
+                if(userFromDb.BlockUsers.Count == 0)
+                {
+                    uriHelper.NavigateTo("https://blocks-1ca4e.firebaseapp.com/login", true);
+                    return null;
+                }
+                else { return user = user ?? foundUser; }
+               
             }
         }
 
