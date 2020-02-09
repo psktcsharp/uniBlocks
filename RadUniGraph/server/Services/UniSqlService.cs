@@ -169,12 +169,12 @@ namespace UniBlocksGraph
                 }
             }
             //exract all blocks   
-            foreach (var bsub in deBlocksSubs)
-            {
+            //foreach (var bsub in deBlocksSubs)
+            //{
               
-                //Console.WriteLine(subsCount);
-                temp.Add(bsub.Block);
-            }
+            //    //Console.WriteLine(subsCount);
+            //    temp.Add(bsub.Block);
+            //}
 
             //subs count 
             foreach (var block in temp)
@@ -770,7 +770,10 @@ namespace UniBlocksGraph
 
         public async Task<IQueryable<Models.UniSql.User>> GetUsers(Query query = null)
         {
-            var items = context.Users.AsQueryable();
+            var items = context.Users
+                .Include(user => user.Subscriptions)
+                .ThenInclude(sub => sub.BlockSubscriptions)
+                .AsQueryable();
 
             if (query != null)
             {
@@ -1604,5 +1607,7 @@ namespace UniBlocksGraph
           
             return saveResult;
         }
+
+        
     }
 }

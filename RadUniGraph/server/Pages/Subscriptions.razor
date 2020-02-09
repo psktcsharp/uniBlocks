@@ -19,7 +19,10 @@
         </RadzenHeading>
         <div class="row">
             <div class="col-md-12">
-                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+
+
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Add" Icon="add_circle_outline" Size="ButtonSize.Medium" Click="@ShowAdd" class="btn btn-primary" @onclick:stopPropagation="true">
+
                 </RadzenButton>
                 <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getSubscriptionsResult)" TItem="UniBlocksGraph.Models.UniSql.Subscription" RowSelect="@Grid0RowSelect">
                     <Columns>
@@ -27,7 +30,7 @@
                         </RadzenGridColumn>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="SubscriptionName" Title="Subscription Name">
                         </RadzenGridColumn>
-                    
+
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="UserId" SortProperty="User.Email" FilterProperty="User.Email" Title="User">
                             <Template Context="data">
                                 @(data.User?.Email)
@@ -43,7 +46,7 @@
                         </RadzenGridColumn>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Title="Services Count">
                             <Template Context="uniBlocksGraphModelsUniSqlBlock">
-                                
+
                                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="build" Text="@uniBlocksGraphModelsUniSqlBlock.AServiceSubscriptions?.Count.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowSubServices(uniBlocksGraphModelsUniSqlBlock.SubscriptionId))" @onclick:stopPropagation="true">
 
                                 </RadzenButton>
@@ -60,13 +63,20 @@
         </div>
     </ChildContent>
 </RadzenContent>
+@inject IModalService ModalService
 @code{
     public bool showServices { get; set; }
-   
+
     public async System.Threading.Tasks.Task doShowSubServices(int subId)
     {
         selectedSubId = subId;
         showServices = !showServices;
-       
+
+    }
+    public async System.Threading.Tasks.Task ShowAdd()
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("BlockId", BlockId);
+        ModalService.Show<AddSubViaBlock>("", parameters);
     }
 }

@@ -27,7 +27,7 @@ namespace HotGraphApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors();
             services.AddDbContextPool<UniBlocksDBContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -39,7 +39,10 @@ namespace HotGraphApi
                  .AddMutationType(d => d.Name("Mutation"))
                 .AddType<AllQueries>()
                 .AddType<AllMutations>()
-                .Create());       
+                
+                .Create());
+         
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,9 +53,23 @@ namespace HotGraphApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(p =>
+            {
+                p
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .SetIsOriginAllowed(_ => true)
+                .AllowCredentials();
+            });
+
             app.UseGraphQL();
             app.UsePlayground();
-            
+           
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers().RequireCors("policy-name");
+            });
         }
         
     }

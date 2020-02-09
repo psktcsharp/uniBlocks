@@ -99,6 +99,11 @@ namespace HotGraphApi.UniBlocks.Data
             return uniBlocks.Services.Include(s => s.AServiceSubscriptions).ThenInclude(ss => ss.Subscription).
                 Where(s => s.AServiceId == serviceId).First();
         }
+        //-- get service by name
+        public AService GetServiceByName(string aServiceName, [Service]UniBlocksDBContext uniBlocks)
+        {
+            return uniBlocks.Services.Where(serv => serv.ServiceName == aServiceName).First();
+        }
         // Subscriptions Queries
         //--= get all subscriptions with the user
         public List<Subscription> GetSubscription(
@@ -114,7 +119,10 @@ namespace HotGraphApi.UniBlocks.Data
         {
             return uniBlocks.Subscriptions.Find(subscriptionId);
         }
-
-
+        //-- get subscription by name
+        public Subscription GetSubscriptionByName(string subscriptionName, [Service]UniBlocksDBContext uniBlocks)
+        {
+            return uniBlocks.Subscriptions.Where(sub => sub.SubscriptionName == subscriptionName).First();
+        }
     }
 }
