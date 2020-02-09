@@ -1593,13 +1593,12 @@ namespace UniBlocksGraph
             else { transactionToSave.TransactionType = "deposit"; }
             //save to database to get id
             context.Add(transactionToSave);
-            await context.SaveChangesAsync();
-            //get AServiceSubscription entity to add while creating the invoice
-            var aServiceSubscription = context.AServiceSubscriptions.Where(ss => ss.SubscriptionId == subId & ss.ServiceId == serviceId).FirstOrDefault();
+            await context.SaveChangesAsync();  
             //create invoice
             var invoiceToSave = new Invoice();
-            invoiceToSave.AServiceSubscription = aServiceSubscription;
-            invoiceToSave.Transaction = transactionToSave;
+            invoiceToSave.AServiceSubscriptionServiceId = serviceId;
+            invoiceToSave.AServiceSubscriptionSubscriptionId = subId;
+            invoiceToSave.TransactionATransactionId = transactionToSave.ATransactionId;
             //save to database 
             context.Add(invoiceToSave);
           var saveResult =  await context.SaveChangesAsync();

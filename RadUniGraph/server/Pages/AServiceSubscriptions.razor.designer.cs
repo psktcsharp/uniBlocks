@@ -77,7 +77,7 @@ namespace UniBlocksGraph.Pages
 
         protected async System.Threading.Tasks.Task Button0Click(MouseEventArgs args)
         {
-            var result = await DialogService.OpenAsync<AddAServiceSubscription>("Add A Service Subscription", null);
+            var result = await DialogService.OpenAsync<AddAServiceSubscription>("Assign a service to a subscriptions", null);
               grid0.Reload();
 
               await InvokeAsync(() => { StateHasChanged(); });
