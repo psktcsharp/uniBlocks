@@ -548,7 +548,14 @@ namespace UniBlocksGraph
                             {
                                 if (bs.BlockId.ToString() == query.Filter)
                                 {
-                                    toAddList.Add(item);
+                                    if (!string.IsNullOrEmpty(query.OrderBy))
+                                    {
+                                        if(bs.SubscriptionId == int.Parse(query.OrderBy))
+                                        {
+                                            toAddList.Add(item);
+                                        }
+                                    }
+                                  
                                 }
 
 
@@ -561,6 +568,7 @@ namespace UniBlocksGraph
                         }
                     }
                     items = toAddList.AsQueryable();
+                   
 
                 }
 
@@ -1570,16 +1578,36 @@ namespace UniBlocksGraph
                 .Include(invo => invo.AServiceSubscription)
                 .ThenInclude(ss => ss.Subscription)
                 .ThenInclude(sub => sub.User)
-                .Where(invoice => invoice.AServiceSubscription.Subscription.UserId == loggedInUser.UserId)
+                .ThenInclude(user => user.BlockUsers)  
                 .AsQueryable();
-
-            //set service name
             foreach (var invoice in invoices)
             {
-                var service = context.Services.Find(invoice.AServiceSubscriptionServiceId);
-                invoice.AServiceSubscription.Service = service;
+
             }
-            return invoices;
+
+            List<Invoice> finalInvocies = new List<Invoice>();
+            //get blocks the logged in user is admin at to include invoices from all subs he manage
+            var blockUsers = context.BlockUsers.Where(bu => bu.UserId == loggedInUser.UserId);
+            foreach (var inv in invoices)
+            {
+                foreach (var bu in inv.AServiceSubscription.Subscription.User.BlockUsers)
+                {
+                    foreach (var buloggedin in blockUsers)
+                    {
+                        if(bu.BlockId == buloggedin.BlockId)
+                        {
+                            var serviceNameFix = context.Services.Find(inv.AServiceSubscriptionServiceId);
+                            inv.AServiceSubscription.Service = serviceNameFix;
+                            finalInvocies.Add(inv);
+                        }
+
+                    }
+                }
+            
+                   
+               
+            }
+            return finalInvocies.Distinct().AsQueryable();
         }
         //create custom transaction
         public async Task<int> CreateCustomTransaction(int serviceId,int subId,decimal amount)
@@ -1598,10 +1626,11 @@ namespace UniBlocksGraph
             var invoiceToSave = new Invoice();
             invoiceToSave.AServiceSubscriptionServiceId = serviceId;
             invoiceToSave.AServiceSubscriptionSubscriptionId = subId;
+            
             invoiceToSave.TransactionATransactionId = transactionToSave.ATransactionId;
             //save to database 
             context.Add(invoiceToSave);
-          var saveResult =  await context.SaveChangesAsync();
+            var saveResult =  await context.SaveChangesAsync();
 
           
             return saveResult;

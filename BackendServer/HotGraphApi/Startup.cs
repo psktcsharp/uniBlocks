@@ -49,10 +49,10 @@ namespace HotGraphApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Create the database if it doesn't exist
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
             app.UseCors(p =>
             {
                 p

@@ -72,6 +72,21 @@ namespace HotGraphApi.UniBlocks.Data
                 Where(b => b.BlockId == blockId).First();
         }
         //--= get block by id with it's services
+        public Block GetBlockWithServices(int blockId, [Service]UniBlocksDBContext uniBlocks)
+        {
+
+            return uniBlocks.Blocks.Include(b => b.BlockSubscriptions).ThenInclude(bs => bs.Subscription).ThenInclude(sub => sub.AServiceSubscriptions).
+                ThenInclude(ss => ss.Service).
+                Where(b => b.BlockId == blockId).First();
+        }
+        //--= get block by name with it's subscriptions
+        public Block GetBlockByName(string blockName, [Service]UniBlocksDBContext uniBlocks)
+        {
+
+            return uniBlocks.Blocks.Include(b => b.BlockSubscriptions).ThenInclude(bs => bs.Subscription).ThenInclude(sub => sub.User).
+                Where(b => b.BlockName == blockName).First();
+        }
+        //--= get block by id with it's services
         public Block GetBlockServices(int blockId, [Service]UniBlocksDBContext uniBlocks)
         {
 
@@ -83,6 +98,34 @@ namespace HotGraphApi.UniBlocks.Data
                 .AsQueryable().First();
                
                 
+        }
+        //--= get all blocks managed by an admin
+        public List<Block> GetBlocksForAdmin(int adminUserId,[Service]UniBlocksDBContext uniBlocks)
+        {
+          
+            var blocks = new List<Block>();
+            var buListToCheck = uniBlocks.BlockUsers.Where(bu => bu.UserId == adminUserId).ToList();
+            var blocksdb = uniBlocks.BlockUsers.Include(bu => bu.Block)
+                .ThenInclude(b => b.BlockSubscriptions)
+                .ThenInclude(bu => bu.Subscription)
+                .ThenInclude(sub => sub.User)
+                .Select(selector => selector.Block)
+                .AsQueryable().ToList();
+
+            foreach (var item in blocksdb)
+            {
+                foreach (var bulistitem in buListToCheck)
+                {
+                    if(item.BlockId == bulistitem.BlockId)
+                    {
+                        blocks.Add(item);
+                    }
+                }
+            }
+
+            return blocks.Distinct().ToList();
+
+
         }
         // Service Queries
         //--= get all services with the subscriptions

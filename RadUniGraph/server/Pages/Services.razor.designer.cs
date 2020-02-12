@@ -76,7 +76,7 @@ namespace UniBlocksGraph.Pages
         }
         protected async System.Threading.Tasks.Task Load(int BlockIdForService = 0,int SubIdForService =0)
         {
-            var uniSqlGetServicesResult = await UniSql.GetServices(new Query() { Filter = BlockIdForService.ToString() });
+            var uniSqlGetServicesResult = await UniSql.GetServices(new Query() { Filter = BlockIdForService.ToString(),OrderBy = SubIdForService.ToString() });
             getServicesResult = uniSqlGetServicesResult;
         }
 

@@ -33,17 +33,19 @@ namespace HotGraphApi.UniBlocks.Data
             return updateResult;
         }
         // --  update service state 
-        public Task<int> UpdateServiceState(
-        int ServiceId,bool ServiceState,
+        public async Task<int> UpdateServiceState(
+        int inputServiceId,bool stateInput,
         [Service]UniBlocksDBContext uniBlocks)
         { 
             uniBlocks.Database.EnsureCreated();
             //get the service
-            var serviceToUpdate = uniBlocks.Services.Find(ServiceId);
+            var serviceToUpdate = uniBlocks.Services.Include(ser => ser.AServiceSubscriptions)
+                .Where( serv => serv.AServiceId == inputServiceId).First();
             //change state 
-            serviceToUpdate.IsActive = ServiceState;
-             //update db
-             var updateResult =  uniBlocks.SaveChangesAsync();
+            serviceToUpdate.IsActive = stateInput;
+            //update db
+            uniBlocks.Services.Update(serviceToUpdate);
+             var updateResult = await uniBlocks.SaveChangesAsync();
             return updateResult;
         }
         // Subscriptions Mutations
@@ -53,8 +55,7 @@ namespace HotGraphApi.UniBlocks.Data
         {
            // uniBlocks.Database.EnsureDeleted();
             uniBlocks.Database.EnsureCreated();
-            input.Balance = new Balance();
-            uniBlocks.Add(input.Balance);
+           
             uniBlocks.Add(input);
            // uniBlocks.Subscriptions.Add(input);
             var insertSubscription = uniBlocks.SaveChangesAsync().Result;
@@ -223,13 +224,10 @@ namespace HotGraphApi.UniBlocks.Data
             uniBlocks.Add(invoiceToSave);
             await uniBlocks.SaveChangesAsync();
            
-            //effect the balance with the amount ; todo
+        
             //get the subscription
             uniBlocks.Subscriptions.Find(aServiceSubscription.SubscriptionId);
-            //get the balance
-
-            var balanceToEffect = uniBlocks.Subscriptions.Include("Balance").Where(sub => sub.SubscriptionId == aServiceSubscription.SubscriptionId).First().Balance;
-            balanceToEffect.value += transactionToSave.Amount;
+           
             //save the new balance
             var saveBalanceResult = await uniBlocks.SaveChangesAsync();
             return saveBalanceResult;

@@ -12,12 +12,12 @@ namespace HotGraphApi.UniBlocks.Data.Models
         {
             AServiceSubscriptions = new List<AServiceSubscription>();
             BlockSubscriptions = new List<BlockSubscriptions>();
-            Balance = new Balance();
+          
             User = new User();
         }
         public int SubscriptionId { get; set; }
         public string SubscriptionName { get; set; }
-        public Balance Balance { get; set; }
+     
         public int UserId { get; set; }
         public User User { get; set; }
         public bool IsActive { get; set; }
