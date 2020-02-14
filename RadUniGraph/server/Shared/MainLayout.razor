@@ -14,7 +14,7 @@
             <div class="col-md-6 d-flex align-items-center">
                 <RadzenSidebarToggle Click="@SidebarToggle0Click">
                 </RadzenSidebarToggle>
-                <RadzenLabel Text="UniBlocksGraph">
+                <RadzenLabel Text="UniBlocks Admin Portal">
                 </RadzenLabel>
             </div>
             <div class="col-md-6 text-lg-right">
@@ -49,29 +49,29 @@
     <ChildContent>
         <RadzenPanelMenu style="height: 100%">
             <ChildContent>
-                <RadzenPanelMenuItem Text="Blocks" Path="blocks" Visible="@Security.IsInRole(new string[]{"Authenticated", "Admin"})">
+                <RadzenPanelMenuItem Icon="home" Text="Blocks" Path="blocks" Visible="@Security.IsInRole(new string[]{"Authenticated", "Admin"})">
                 </RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Assign Service" Path="a-service-subscriptions" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
+                <RadzenPanelMenuItem Icon="build" Text="Assign Service" Path="a-service-subscriptions" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
                 </RadzenPanelMenuItem>
-
+                <RadzenPanelMenuItem Icon="attach_money" Text="Invoices" Path="invoices" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
+                </RadzenPanelMenuItem>
+                <RadzenPanelMenuItem Icon="message" Text="Messages" Path="messages" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
+                </RadzenPanelMenuItem>
                 @*<RadzenPanelMenuItem Text="Block Subscriptions" Path="block-subscriptions" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
-                </RadzenPanelMenuItem>*@
+        </RadzenPanelMenuItem>*@
                 @*<RadzenPanelMenuItem Text="Block Users" Path="block-users" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
-                </RadzenPanelMenuItem>*@
-                <RadzenPanelMenuItem Text="Invoices" Path="invoices" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
-                </RadzenPanelMenuItem>
-                <RadzenPanelMenuItem Text="Messages" Path="messages" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
-                </RadzenPanelMenuItem>
+        </RadzenPanelMenuItem>*@
+
                 @*<RadzenPanelMenuItem Text="Services" Path="services" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
-                </RadzenPanelMenuItem>*@
+        </RadzenPanelMenuItem>*@
                 @*<RadzenPanelMenuItem Text="Subscriptions" Path="subscriptions" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
-                </RadzenPanelMenuItem>*@
+        </RadzenPanelMenuItem>*@
                 @*<RadzenPanelMenuItem Text="Transactions" Path="transactions" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
-                </RadzenPanelMenuItem>*@
+        </RadzenPanelMenuItem>*@
                 @*<RadzenPanelMenuItem Text="Users" Path="users" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
-                </RadzenPanelMenuItem>*@
+        </RadzenPanelMenuItem>*@
                 @*<RadzenPanelMenuItem Text="User Messages" Path="user-messages" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
-                </RadzenPanelMenuItem>*@
+        </RadzenPanelMenuItem>*@
             </ChildContent>
         </RadzenPanelMenu>
     </ChildContent>

@@ -168,26 +168,31 @@ namespace UniBlocksGraph
                     }
                 }
             }
-            //exract all blocks   
-            //foreach (var bsub in deBlocksSubs)
-            //{
-              
-            //    //Console.WriteLine(subsCount);
-            //    temp.Add(bsub.Block);
-            //}
 
             //subs count 
             foreach (var block in temp)
             {
                 //subs and service count
                 var subsCount = context.BlockSubscriptions.Where(bu => bu.BlockId == block.BlockId).Select(selector => selector.SubscriptionId).Count();
-                var serviceCount = context.BlockSubscriptions.Where(b => b.BlockId == block.BlockId)
+                var serviceCount = context.AServiceSubscriptions
                    .Include(b => b.Subscription)
-                   .ThenInclude(s => s.AServiceSubscriptions)
-                   .Count();
+                   .ThenInclude(sub => sub.BlockSubscriptions)
+                   .AsQueryable()
+                   .ToList();
          
                 block.SubsCount = subsCount;
-                block.ServicesCount = serviceCount;
+                //var tempCountList = new List<Service>();
+                //foreach (var item in serviceCount)
+                //{
+                //    foreach (var bs in item.Subscription.BlockSubscriptions)
+                //    {
+                //        if(bs.BlockId == block.BlockId)
+                //        {
+                //            tempCountList.Add(item.Service);
+                //        }
+                //    }
+                //}
+                //block.ServicesCount = tempCountList.Distinct().Count();
             }
 
             //clean from dublicated blocks
@@ -525,7 +530,6 @@ namespace UniBlocksGraph
         public async Task<IQueryable<Models.UniSql.Service>> GetServices(Query query = null)
         {
             var items = context.Services.AsQueryable();
-
             if (query != null)
             {
                 if (!string.IsNullOrEmpty(query.Filter))
@@ -535,9 +539,7 @@ namespace UniBlocksGraph
                     var tempList = items.Include(serv => serv.AServiceSubscriptions)
                             .ThenInclude(ss => ss.Subscription)
                             .ThenInclude(sub => sub.BlockSubscriptions).AsQueryable();
-
                     var toAddList = new List<Service>();
-
                     foreach (var item in tempList)
                     {
                         foreach (var ss in item.AServiceSubscriptions)
@@ -558,30 +560,18 @@ namespace UniBlocksGraph
                                         {
                                             toAddList.Add(item);
                                         }
-                                    }
-                                   
-                                  
+                                    }                                              
                                 }
-
-
                             }
-                            //if( ss. == int.Parse(query.Filter))
-                            //{
-                            //    toAddList.Add(item);
-                            //}
-
                         }
                     }
                     items = toAddList.AsQueryable();
-                   
-
                 }
 
                 if (!string.IsNullOrEmpty(query.OrderBy))
                 {
                     items = items.OrderBy(query.OrderBy);
                 }
-
                 if (!string.IsNullOrEmpty(query.Expand))
                 {
                     var propertiesToExpand = query.Expand.Split(',');
@@ -590,7 +580,6 @@ namespace UniBlocksGraph
                         items = items.Include(p);
                     }
                 }
-
                 if (query.Skip.HasValue)
                 {
                     items = items.Skip(query.Skip.Value);
@@ -601,14 +590,10 @@ namespace UniBlocksGraph
                     items = items.Take(query.Top.Value);
                 }
             }
-
             OnServicesRead(ref items);
-
-            return await Task.FromResult(items);
+            return await Task.FromResult(items.Distinct());
         }
-
         partial void OnServiceCreated(Models.UniSql.Service item);
-
         public async Task<Models.UniSql.Service> CreateService(Models.UniSql.Service service)
         {
             OnServiceCreated(service);
@@ -622,12 +607,10 @@ namespace UniBlocksGraph
         {
             navigationManager.NavigateTo(query != null ? query.ToUrl("export/unisql/subscriptions/excel") : "export/unisql/subscriptions/excel", true);
         }
-
         public async Task ExportSubscriptionsToCSV(Query query = null)
         {
             navigationManager.NavigateTo(query != null ? query.ToUrl("export/unisql/subscriptions/csv") : "export/unisql/subscriptions/csv", true);
         }
-
         partial void OnSubscriptionsRead(ref IQueryable<Models.UniSql.Subscription> items);
 
         public async Task<IQueryable<Models.UniSql.Subscription>> GetSubscriptions(Query query = null)

@@ -15,7 +15,6 @@ namespace UniBlocksGraph.Models.UniSql
       set;
     }
 
-
     public ICollection<Invoice> Invoices { get; set; }
     public Service Service { get; set; }
     [Key]

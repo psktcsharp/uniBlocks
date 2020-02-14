@@ -9,42 +9,38 @@ namespace UniBlocksGraph.Models.UniSql
   public partial class Block
   {
         [NotMapped]
-        public int SubsCount {
-            get;set;
-            //get {
-            //    //var block = this;
-            //    //    return BlockSubscriptions.Count;
-            //}
-            //set { } 
+        public int SubsCount
+        {
+          get;set;
         }
         [NotMapped]
         public int ServicesCount { get; set; }
         [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int BlockId
-    {
-      get;
-      set;
-    }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int BlockId
+        {
+          get;
+          set;
+        }
 
 
-    public ICollection<BlockUser> BlockUsers { get; set; }
+        public ICollection<BlockUser> BlockUsers { get; set; }
 
-    public ICollection<BlockSubscription> BlockSubscriptions { get; set; }
-    public string BlockName
-    {
-      get;
-      set;
-    }
-    public string location
-    {
-      get;
-      set;
-    }
-    public bool isActive
-    {
-      get;
-      set;
-    }
+        public ICollection<BlockSubscription> BlockSubscriptions { get; set; }
+        public string BlockName
+        {
+          get;
+          set;
+        }
+        public string location
+        {
+          get;
+          set;
+        }
+        public bool isActive
+        {
+          get;
+          set;
+        }
   }
 }

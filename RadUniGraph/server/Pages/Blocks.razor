@@ -21,8 +21,6 @@
             <div class="col-md-12">
                 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
                 </RadzenButton>
-                @*<button @onclick="@(() => Modal.Show<InvoicesComponent>("test"))" class="btn btn-primary">Test Button</button>*@
-
                 <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getBlocksResult)" TItem="UniBlocksGraph.Models.UniSql.Block" RowSelect="@Grid0RowSelect">
                     <Columns>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="BlockId" Title="Block Id">
@@ -32,13 +30,7 @@
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="location" Title="Location">
                         </RadzenGridColumn>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="isActive" Title="Is Active">
-                        </RadzenGridColumn>
-                        @*<RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" TextAlign="TextAlign.Center">
-                            <Template Context="uniBlocksGraphModelsUniSqlBlock">
-                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) => GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlBlock))" @onclick:stopPropagation="true">
-                                </RadzenButton>
-                            </Template>
-                        </RadzenGridColumn>*@
+                        </RadzenGridColumn>         
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Title="Subs Count">
                             <Template Context="uniBlocksGraphModelsUniSqlBlock">
                                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="people" Text="@uniBlocksGraphModelsUniSqlBlock.SubsCount.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowSubs(uniBlocksGraphModelsUniSqlBlock.BlockId))" @onclick:stopPropagation="true">
@@ -47,7 +39,7 @@
                         </RadzenGridColumn>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Title="Services Count">
                             <Template Context="uniBlocksGraphModelsUniSqlBlock">
-                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="build" Text="@uniBlocksGraphModelsUniSqlBlock.ServicesCount.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowServices(uniBlocksGraphModelsUniSqlBlock.BlockId))" @onclick:stopPropagation="true">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="build"  Size="ButtonSize.Medium" Click="@(() => doShowServices(uniBlocksGraphModelsUniSqlBlock.BlockId))" @onclick:stopPropagation="true">
                                 </RadzenButton>
                             </Template>
                         </RadzenGridColumn>

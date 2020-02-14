@@ -17,8 +17,8 @@
         <div class="row">
             <div class="col-md-12">
                 @*RowSelect="@Grid0RowSelect"*@
-                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
-                </RadzenButton>
+                @*<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+                </RadzenButton>*@
                 <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@Payments" TItem="UniBlocksGraph.Models.UniSql.Invoice">
                     <Columns>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Invoice" Context="uniBlocksGraphModelsUniSqlInvoice" Property="InvoiceId" Title="Invoice Id">
