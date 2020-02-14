@@ -167,5 +167,17 @@ namespace HotGraphApi.UniBlocks.Data
         {
             return uniBlocks.Subscriptions.Where(sub => sub.SubscriptionName == subscriptionName).First();
         }
+        // invoice Queries
+        //- get all invoices with transaction
+        public List<Invoice> GetATransactions(
+            [Service]UniBlocksDBContext uniBlocks)
+        {
+            return uniBlocks.Invoices
+                .Include(inv => inv.AServiceSubscription)
+                .Include(inv => inv.Transaction)
+                .ToList();
+                
+               
+        }
     }
 }

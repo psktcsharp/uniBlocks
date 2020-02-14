@@ -76,7 +76,7 @@ namespace UniBlocksGraph
             services.AddDbContext<UniBlocksGraph.Data.UniSqlContext>(options =>
             {
               options.UseSqlServer(Configuration.GetConnectionString("UniSQLConnection"));
-            });
+            }, ServiceLifetime.Transient);
 
             services.AddControllersWithViews();
             services.AddRazorPages();

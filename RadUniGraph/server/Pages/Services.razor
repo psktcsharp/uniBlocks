@@ -30,12 +30,12 @@
                         </RadzenGridColumn>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Service" Context="uniBlocksGraphModelsUniSqlService" Property="IsActive" Title="Is Active">
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Service" Context="uniBlocksGraphModelsUniSqlService" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                        @*<RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Service" Context="uniBlocksGraphModelsUniSqlService" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
                             <Template Context="uniBlocksGraphModelsUniSqlService">
                                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) => GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlService))" @onclick:stopPropagation="true">
                                 </RadzenButton>
                             </Template>
-                        </RadzenGridColumn>
+                        </RadzenGridColumn>*@
                         @if (SubIdForService != 0)
                         {
                             <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Service" Context="uniBlocksGraphModelsUniSqlService" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">

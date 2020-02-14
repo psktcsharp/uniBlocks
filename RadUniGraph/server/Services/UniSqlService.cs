@@ -550,11 +550,16 @@ namespace UniBlocksGraph
                                 {
                                     if (!string.IsNullOrEmpty(query.OrderBy))
                                     {
-                                        if(bs.SubscriptionId == int.Parse(query.OrderBy))
+                                        if (query.OrderBy == "0")
+                                        {
+                                            toAddList.Add(item);
+                                        }
+                                        if (bs.SubscriptionId == int.Parse(query.OrderBy))
                                         {
                                             toAddList.Add(item);
                                         }
                                     }
+                                   
                                   
                                 }
 
@@ -649,9 +654,10 @@ namespace UniBlocksGraph
                         Console.WriteLine(blockUsers.First().Block.SubsCount);
                     }
                     var temp = new List<Subscription>();
+                    var tempUsers = context.Users.AsQueryable().ToList();
                     foreach (var sub in items)
                     {
-                        var user = context.Users.Find(sub.UserId);
+                        var user = tempUsers.Where(us => us.UserId == sub.UserId).First();
                         sub.User = user;
                         temp.Add(sub);
 
@@ -1577,42 +1583,41 @@ namespace UniBlocksGraph
                 .Include(invo => invo.Transaction)
                 .Include(invo => invo.AServiceSubscription)
                 .ThenInclude(ss => ss.Subscription)
-                .ThenInclude(sub => sub.User)
-                .ThenInclude(user => user.BlockUsers)  
-                .AsQueryable();
-            foreach (var invoice in invoices)
-            {
-
-            }
+                 .ThenInclude(sub => sub.BlockSubscriptions)
+                 .Include(bs => bs.AServiceSubscription)
+                 .ThenInclude(sss => sss.Subscription)
+                 .ThenInclude(subsub => subsub.User)
+                
+                .AsQueryable()
+                .ToList();
+     
 
             List<Invoice> finalInvocies = new List<Invoice>();
             //get blocks the logged in user is admin at to include invoices from all subs he manage
-            var blockUsers = context.BlockUsers.Where(bu => bu.UserId == loggedInUser.UserId);
+            var blockUsers = context.BlockUsers.Where(bu => bu.UserId == loggedInUser.UserId).AsQueryable().ToList();
+            var tempServices = context.Services.AsQueryable().ToList();
             foreach (var inv in invoices)
             {
-                foreach (var bu in inv.AServiceSubscription.Subscription.User.BlockUsers)
+                foreach (var bu in inv.AServiceSubscription.Subscription.BlockSubscriptions)
                 {
                     foreach (var buloggedin in blockUsers)
                     {
                         if(bu.BlockId == buloggedin.BlockId)
                         {
-                            var serviceNameFix = context.Services.Find(inv.AServiceSubscriptionServiceId);
+                            var serviceNameFix = tempServices.Where( ts => ts.AServiceId == inv.AServiceSubscriptionServiceId).First();
                             inv.AServiceSubscription.Service = serviceNameFix;
                             finalInvocies.Add(inv);
                         }
 
                     }
                 }
-            
-                   
-               
+           
             }
             return finalInvocies.Distinct().AsQueryable();
         }
         //create custom transaction
         public async Task<int> CreateCustomTransaction(int serviceId,int subId,decimal amount)
-        {
-            
+        {  
             //create transaction
             var transactionToSave = new Transaction();
             transactionToSave.Amount = amount;
@@ -1625,17 +1630,12 @@ namespace UniBlocksGraph
             //create invoice
             var invoiceToSave = new Invoice();
             invoiceToSave.AServiceSubscriptionServiceId = serviceId;
-            invoiceToSave.AServiceSubscriptionSubscriptionId = subId;
-            
+            invoiceToSave.AServiceSubscriptionSubscriptionId = subId; 
             invoiceToSave.TransactionATransactionId = transactionToSave.ATransactionId;
             //save to database 
             context.Add(invoiceToSave);
             var saveResult =  await context.SaveChangesAsync();
-
-          
             return saveResult;
-        }
-
-        
+        }   
     }
 }

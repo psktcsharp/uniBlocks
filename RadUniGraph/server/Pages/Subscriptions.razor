@@ -21,7 +21,7 @@
             <div class="col-md-12">
 
 
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Add" Icon="add_circle_outline" Size="ButtonSize.Medium" Click="@ShowAdd" class="btn btn-primary" @onclick:stopPropagation="true">
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@ShowAdd"  @onclick:stopPropagation="true">
 
                 </RadzenButton>
                 <RadzenGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@(getSubscriptionsResult)" TItem="UniBlocksGraph.Models.UniSql.Subscription" RowSelect="@Grid0RowSelect">
@@ -38,12 +38,12 @@
                         </RadzenGridColumn>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Property="IsActive" Title="Is Active">
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                        @*<RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
                             <Template Context="uniBlocksGraphModelsUniSqlSubscription">
                                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) => GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlSubscription))" @onclick:stopPropagation="true">
                                 </RadzenButton>
                             </Template>
-                        </RadzenGridColumn>
+                        </RadzenGridColumn>*@
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Subscription" Context="uniBlocksGraphModelsUniSqlSubscription" Title="Services Count">
                             <Template Context="uniBlocksGraphModelsUniSqlBlock">
 

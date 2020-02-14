@@ -33,12 +33,12 @@
                         </RadzenGridColumn>
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Property="isActive" Title="Is Active">
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" TextAlign="TextAlign.Center">
+                        @*<RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" TextAlign="TextAlign.Center">
                             <Template Context="uniBlocksGraphModelsUniSqlBlock">
                                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) => GridDeleteButtonClick(args, uniBlocksGraphModelsUniSqlBlock))" @onclick:stopPropagation="true">
                                 </RadzenButton>
                             </Template>
-                        </RadzenGridColumn>
+                        </RadzenGridColumn>*@
                         <RadzenGridColumn TItem="UniBlocksGraph.Models.UniSql.Block" Context="uniBlocksGraphModelsUniSqlBlock" Title="Subs Count">
                             <Template Context="uniBlocksGraphModelsUniSqlBlock">
                                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="people" Text="@uniBlocksGraphModelsUniSqlBlock.SubsCount.ToString()" Size="ButtonSize.Medium" Click="@(() => doShowSubs(uniBlocksGraphModelsUniSqlBlock.BlockId))" @onclick:stopPropagation="true">
