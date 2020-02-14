@@ -1,0 +1,11 @@
+﻿<div class="alert alert-danger">
+    <strong>Error!</strong> @msg
+</div>
+
+@code {
+    protected override Task OnInitializedAsync()
+    {
+        msg = Parameters.TryGet<string>("Msg");
+        return base.OnInitializedAsync();
+    }
+}

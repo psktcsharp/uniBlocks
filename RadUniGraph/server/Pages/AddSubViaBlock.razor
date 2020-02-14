@@ -1,0 +1,146 @@
+﻿<RadzenContent Container="main">
+    <ChildContent>
+        <div class="row">
+            <div class="col-md-12">
+                <Radzen.Blazor.RadzenCard>
+                    <ChildContent>
+                        <div style="margin-bottom: 1rem" class="row">
+                            <div class="col-md-12">
+                                <RadzenLabel Text="Create a new subscription :" style="width: 100%;font-size:large;font-weight:bold">
+                                </RadzenLabel>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem" class="row">
+                            <div class="col-md-3">
+                                <RadzenLabel Text="Block" Component="Block Name" style="width: 100%">
+                                </RadzenLabel>
+                            </div>
+                            <div class="col-md-12">
+                                <RadzenTextBox ReadOnly="true" style="width: 100%" @bind-Value="@(block.BlockName)" Name="Block Name">
+                                </RadzenTextBox>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem" class="row">
+                            <div class="col-md-3">
+                                <RadzenLabel Text="Subscription" Component="Subscription Name" style="width: 100%">
+                                </RadzenLabel>
+                            </div>
+                            <div class="col-md-12">
+                                <RadzenTextBox style="width: 100%" @bind-Value="@(newSubName)" Name="Subscription Name">
+                                </RadzenTextBox>
+                            
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem" class="row">
+                            <div class="col-md-3">
+                                <RadzenLabel Text="User" Component="UserId" style="width: 100%">
+                                </RadzenLabel>
+                            </div>
+                            <div class="col-md-12">
+                                <RadzenDropDown Data="@(getUsersResult)" TextProperty="Email" ValueProperty="UserId" Placeholder="Choose User" style="display: block; width: 100%" @bind-Value="@(UserId)" Name="UserId">
+                                </RadzenDropDown>
+                                <RadzenRequiredValidator Component="UserId" Text="UserId is required" style="position: absolute">
+                                </RadzenRequiredValidator>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem" class="row">
+                            <div class="col-md-3">
+                                <RadzenLabel Text="Is Active" Component="IsActive" style="width: 100%">
+                                </RadzenLabel>
+                            </div>
+                            <div class="col-md-12">
+                                <Radzen.Blazor.RadzenCheckBox  style="display: block" @bind-Value="@(isActive)" Name="UserId">
+                                </Radzen.Blazor.RadzenCheckBox>
+                               
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col col-md-9">
+                                <RadzenButton ButtonType="ButtonType.Button" Click="@doSave" Icon="save" Text="Create" ButtonStyle="ButtonStyle.Primary">
+                                </RadzenButton>
+                            </div>
+                        </div>
+
+                        @code{
+
+                        }
+                    </ChildContent>
+                </Radzen.Blazor.RadzenCard>
+            </div>
+        </div>
+    </ChildContent>
+</RadzenContent>
+@using UniBlocksGraph.Models.UniSql;
+@inject IModalService ModalService
+@inject UniSqlService uniSqlService
+@code {
+    public int _blockId { get; set; }
+    protected override void OnInitialized()
+    {
+        List<User> usersInBlock = new List<User>();
+        block = new Models.UniSql.Block() { BlockName = "Not found" };
+        _blockId = Parameters.Get<int>("BlockId");
+        block = UniSql.GetBlockByBlockId(_blockId).Result;
+        var uniSqlGetUsersResult = UniSql.GetUsers().Result;
+        foreach (var user in uniSqlGetUsersResult)
+        {
+            foreach (var sub in user.Subscriptions)
+            {
+                foreach (var bs in sub.BlockSubscriptions)
+                {
+                    if (bs.BlockId == _blockId)
+                    {
+                        usersInBlock.Add(user);
+                    }
+                }
+
+            }
+        }
+        getUsersResult = usersInBlock;
+    }
+    private async void doSave()
+    {
+        var result = "";
+        try
+        {
+
+            var parameters = new ModalParameters();
+            if (newSubName.Length == 0)
+            {
+                result = "Subscription Name cannot be empty";
+                parameters.Add("Msg", result);
+                ModalService.Show<Error>("Alert", parameters);
+
+            }
+            else
+            {
+                //create new sub
+                var newSub = new Subscription();
+                newSub.SubscriptionName = newSubName;
+                newSub.IsActive = isActive;
+                newSub.UserId = UserId;
+
+                await uniSqlService.CreateSubscription(newSub);
+                // create new block sub
+                var blocksub = new BlockSubscription();
+                blocksub.BlockId = _blockId;
+                blocksub.SubscriptionId = newSub.SubscriptionId;
+                await uniSqlService.CreateBlockSubscription(blocksub);
+
+                result = "Subscription was created successfully";
+                parameters.Add("Msg", result);
+                ModalService.Show<Success>("Alert", parameters);
+            }
+
+        }
+        catch (Exception error)
+        {
+            result = "An error occurred during creating the subscription" + " " + error.Message + error.InnerException;
+            var parameters = new ModalParameters();
+            parameters.Add("Msg", result);
+            ModalService.Show<Error>("Alert", parameters);
+        }
+
+    }
+}

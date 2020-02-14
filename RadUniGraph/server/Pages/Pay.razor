@@ -1,0 +1,106 @@
+﻿@page "/pay"
+@layout MainLayout
+@inherits UniBlocksGraph.Pages.PayComponent
+@using UniBlocksGraph.Models.UniSql
+<RadzenContent Container="main">
+    <ChildContent>
+        <div class="row">
+            <div class="col-md-12">
+                <Radzen.Blazor.RadzenCard>
+                    <ChildContent>
+                        <div style="margin-bottom: 1rem" class="row">
+                            <div class="col-md-3">
+                                <RadzenLabel Text="Service" Component="Service Name" style="width: 100%">
+                                </RadzenLabel>
+                            </div>
+                            <div class="col-md-12">
+                                <RadzenTextBox style="width: 100%" @bind-Value="@(service.ServiceName)" Name="Service Name">
+                                </RadzenTextBox>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem" class="row">
+                            <div class="col-md-3">
+                                <RadzenLabel Text="Subscription" Component="Subscription Name" style="width: 100%">
+                                </RadzenLabel>
+                            </div>
+                            <div class="col-md-12">
+                                <RadzenTextBox style="width: 100%" @bind-Value="@(sub.SubscriptionName)" Name="Subscription Name">
+                                </RadzenTextBox>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 1rem" class="row">
+                            <div class="col-md-3">
+                                <RadzenLabel Text="Amount" Component="Amount" style="width: 100%;">
+                                </RadzenLabel>
+                            </div>
+                            <div class="col-md-12">
+                                <RadzenNumeric Name="Amount" TValue="decimal" Style="margin-bottom: 20px" @bind-Value="@(amount)" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-md-9">
+                                <RadzenButton ButtonType="ButtonType.Button" Click="@doPay" Icon="save" Text="Confirim Payment" ButtonStyle="ButtonStyle.Primary">
+                                </RadzenButton>             
+                            </div>
+                        </div>
+
+                        @code{
+
+                        }
+                    </ChildContent>
+                </Radzen.Blazor.RadzenCard>
+            </div>
+        </div>
+    </ChildContent>
+</RadzenContent>
+@inject IModalService ModalService
+@inject UniSqlService uniSqlService
+
+@code{
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+
+    public int _serviceId { get; set; }
+    public int _subId { get; set; }
+    protected override Task OnInitializedAsync()
+    {
+        _serviceId = Parameters.TryGet<int>("ServiceId");
+        _subId = Parameters.TryGet<int>("SubId");
+
+        service = UniSql.GetServiceByAServiceId(_serviceId).Result;
+        sub = UniSql.GetSubscriptionBySubscriptionId(_subId).Result;
+        return base.OnInitializedAsync();
+    }
+
+    private async void doPay()
+    {
+        try
+        {
+            var parameters = new ModalParameters();
+            if (amount == 0)
+            {
+                result = "Amount Cannot be 0";
+                parameters.Add("Msg", result);
+                ModalService.Show<Error>("Alert", parameters);
+
+            }
+            else
+            {
+                await uniSqlService.CreateCustomTransaction(_serviceId, _subId, amount);
+                result = "Payment was processed successfully";
+                parameters.Add("Msg", result);
+                ModalService.Show<Success>("Alert", parameters);
+            }
+
+        }
+        catch (Exception error)
+        {
+            result = "An error occurred during processing your payment" + " " + error.Message + error.InnerException;
+            var parameters = new ModalParameters();
+            parameters.Add("Msg", result);
+            ModalService.Show<Error>("Alert", parameters);
+        }
+
+    }
+
+}

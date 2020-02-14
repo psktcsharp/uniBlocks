@@ -340,6 +340,6 @@ ASALocalRun/
 healthchecksdb
 
 AspNetCoreGraph/appsettings.Development.json
-RadUniGraph
+RadUniGraph/server/appsettings.json
 BackendServer/HotGraphApi/appsettings.json
 HotGraphApi/appsettings.json
